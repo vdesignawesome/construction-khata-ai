@@ -118,14 +118,13 @@ export function saveLocalUsers(users: SaasUser[]) {
 
 export function getCurrentSession(): { user: SaasUser; tenant: SaasTenant } | null {
   try {
-    // Purge legacy permanent localStorage session so fresh app entry requires login
-    localStorage.removeItem(STORAGE_KEY_CURRENT_SESSION);
-
-    const raw = sessionStorage.getItem(STORAGE_KEY_CURRENT_SESSION);
+    // Read from permanent localStorage (or sessionStorage fallback)
+    const raw = localStorage.getItem(STORAGE_KEY_CURRENT_SESSION) || sessionStorage.getItem(STORAGE_KEY_CURRENT_SESSION);
     if (raw) {
       const parsed = JSON.parse(raw);
       // Purge legacy dummy demo contractor
       if (parsed.user?.email === 'contractor@sharma.com' || parsed.user?.displayName?.includes('Ramesh Sharma')) {
+        localStorage.removeItem(STORAGE_KEY_CURRENT_SESSION);
         sessionStorage.removeItem(STORAGE_KEY_CURRENT_SESSION);
         return null;
       }
@@ -137,11 +136,14 @@ export function getCurrentSession(): { user: SaasUser; tenant: SaasTenant } | nu
 
 export function saveCurrentSession(user: SaasUser | null, tenant: SaasTenant | null) {
   try {
-    localStorage.removeItem(STORAGE_KEY_CURRENT_SESSION);
     if (!user || !tenant) {
+      localStorage.removeItem(STORAGE_KEY_CURRENT_SESSION);
       sessionStorage.removeItem(STORAGE_KEY_CURRENT_SESSION);
     } else {
-      sessionStorage.setItem(STORAGE_KEY_CURRENT_SESSION, JSON.stringify({ user, tenant }));
+      const data = JSON.stringify({ user, tenant });
+      // Store in permanent localStorage so user stays logged in forever until manual logout
+      localStorage.setItem(STORAGE_KEY_CURRENT_SESSION, data);
+      sessionStorage.setItem(STORAGE_KEY_CURRENT_SESSION, data);
     }
   } catch (e) {}
 }
