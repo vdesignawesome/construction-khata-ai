@@ -57,6 +57,41 @@ export const useAppStore = create<AppState>((set, get) => ({
   refreshTrigger: 0,
 
   loadInitialData: async () => {
+    // Purge legacy demo seed sites so contractors start with 100% clean production state
+    const demoIds = ['site_sec35', 'site_modeltown', 'site_shopmain'];
+    for (const siteId of demoIds) {
+      try {
+        const exists = await db.sites.get(siteId);
+        if (exists) {
+          await db.transaction('rw', [
+            db.sites,
+            db.accounts,
+            db.materials,
+            db.purchases,
+            db.purchaseItems,
+            db.payments,
+            db.expenses,
+            db.labourWork,
+            db.stockMovements,
+            db.pendingAiTransactions
+          ], async () => {
+            await db.sites.delete(siteId);
+            await db.accounts.where({ siteId }).delete();
+            await db.materials.where({ siteId }).delete();
+            await db.purchases.where({ siteId }).delete();
+            await db.purchaseItems.where({ siteId }).delete();
+            await db.payments.where({ siteId }).delete();
+            await db.expenses.where({ siteId }).delete();
+            await db.labourWork.where({ siteId }).delete();
+            await db.stockMovements.where({ siteId }).delete();
+            await db.pendingAiTransactions.where({ siteId }).delete();
+          });
+        }
+      } catch (e) {
+        console.warn('Error purging demo site:', e);
+      }
+    }
+
     // Load settings
     const settings = await db.settings.get('default');
     if (settings) {
@@ -68,7 +103,7 @@ export const useAppStore = create<AppState>((set, get) => ({
 
     // Load active site from storage
     const savedSiteId = localStorage.getItem('khata_current_site_id');
-    if (savedSiteId) {
+    if (savedSiteId && !demoIds.includes(savedSiteId)) {
       const site = await db.sites.get(savedSiteId);
       if (site) {
         set({ currentSiteId: site.id, currentSite: site });
@@ -76,14 +111,14 @@ export const useAppStore = create<AppState>((set, get) => ({
       }
     }
 
-    // If no valid site in local storage, check if any sites exist
+    // If no valid real site in local storage, check if any real sites exist
     const firstSite = await db.sites.orderBy('createdAt').first();
     if (firstSite) {
       localStorage.setItem('khata_current_site_id', firstSite.id);
       set({ currentSiteId: firstSite.id, currentSite: firstSite });
     } else {
-      // Prompt user to select/create site immediately
-      set({ isSiteSelectorOpen: true });
+      localStorage.removeItem('khata_current_site_id');
+      set({ currentSiteId: null, currentSite: null, isSiteSelectorOpen: true });
     }
   },
 

@@ -68,9 +68,10 @@ export const SiteSelectorModal: React.FC = () => {
     setIsLoading(true);
     try {
       const allSites = await db.sites.orderBy('createdAt').reverse().toArray();
+      const realSites = allSites.filter(s => !['site_sec35', 'site_modeltown', 'site_shopmain'].includes(s.id));
       const withFinancials: SiteWithFinancials[] = [];
 
-      for (const site of allSites) {
+      for (const site of realSites) {
         try {
           const summary = await calculateSiteFinancialSummary(site.id);
           withFinancials.push({ site, summary });
