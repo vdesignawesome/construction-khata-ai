@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="theme-color" content="#f59e0b" />
+    <meta name="description" content="Construction Khata AI - Offline Construction Accounting & Material Inventory" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="apple-touch-icon" href="/icon-192.png" />
+    <title>Construction Khata AI | Site Accounting & Inventory</title>
+  </head>
+  <body class="bg-charcoal-900 text-slate-100 antialiased selection:bg-construction-500 selection:text-black">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+    <script>
+      // In local dev, unregister legacy service workers to prevent cached chunk conflicts
+      if ('serviceWorker' in navigator) {
+        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+          navigator.serviceWorker.getRegistrations().then(function(registrations) {
+            for (let reg of registrations) {
+              reg.unregister();
+            }
+          });
+        } else {
+          window.addEventListener('load', function() {
+            navigator.serviceWorker.register('/sw.js').catch(function() {});
+          });
+        }
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <rect width="100" height="100" rx="24" fill="#0F172A"/>
+  <rect x="2" y="2" width="96" height="96" rx="22" stroke="#F59E0B" stroke-width="3" stroke-dasharray="8 4"/>
+  <!-- Construction Helmet -->
+  <path d="M50 24C34 24 24 37 24 50H76C76 37 66 24 50 24Z" fill="#F59E0B"/>
+  <rect x="18" y="48" width="64" height="7" rx="3.5" fill="#D97706"/>
+  <path d="M47 22H53V35H47V22Z" fill="#D97706"/>
+  <!-- Khata ledger lines -->
+  <rect x="28" y="62" width="44" height="4" rx="2" fill="#E2E8F0"/>
+  <rect x="28" y="70" width="30" height="4" rx="2" fill="#94A3B8"/>
+  <circle x="68" y="72" cx="68" cy="72" r="3" fill="#10B981"/>
+  <!-- AI sparkle -->
+  <path d="M74 20L76 25L81 27L76 29L74 34L72 29L67 27L72 25L74 20Z" fill="#FBBF24"/>
+</svg>
