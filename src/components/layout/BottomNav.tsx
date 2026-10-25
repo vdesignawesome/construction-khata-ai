@@ -13,23 +13,26 @@ import {
   Database,
   Settings,
   Mic,
+  User,
   X
 } from 'lucide-react';
 import { useAppStore, type NavigationTab } from '../../store/useAppStore';
+import { useSaasStore } from '../../store/useSaasStore';
 
 export const BottomNav: React.FC = () => {
   const { activeTab, setActiveTab, setAiModalOpen } = useAppStore();
+  const { setAuthModalOpen } = useSaasStore();
   const [isMoreOpen, setIsMoreOpen] = useState(false);
 
   const moreItems: Array<{ id?: NavigationTab; label: string; icon: React.FC<{ className?: string }>; action?: () => void }> = [
+    { label: 'My Account', icon: User, action: () => setAuthModalOpen(true) },
     { id: 'accounts', label: 'Accounts (Parties)', icon: Users },
     { id: 'materials', label: 'Stock & Inventory', icon: Boxes },
     { id: 'labour', label: 'Labour Work', icon: HardHat },
     { id: 'reports', label: 'Reports & Export', icon: FileBarChart },
     { id: 'search', label: 'Search Site', icon: Search },
     { id: 'backup', label: 'Backup & Restore', icon: Database },
-    { id: 'settings', label: 'Settings', icon: Settings },
-    { label: 'AI Voice Entry', icon: Mic, action: () => setAiModalOpen(true) }
+    { id: 'settings', label: 'Settings', icon: Settings }
   ];
 
   return (

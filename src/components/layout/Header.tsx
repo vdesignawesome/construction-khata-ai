@@ -68,27 +68,27 @@ export const Header: React.FC<HeaderProps> = ({ onToggleSidebar }) => {
           <Menu className="w-5 h-5" />
         </button>
 
-        {/* Current Site Badge - Requirement 6 */}
+        {/* Current Site Badge */}
         <button
           onClick={() => setSiteSelectorOpen(true)}
-          className="flex items-center space-x-2 text-left group bg-charcoal-800/80 hover:bg-charcoal-800 border border-charcoal-700/60 px-3 py-1.5 rounded-lg transition"
+          className="flex items-center space-x-2.5 text-left group bg-charcoal-800/80 hover:bg-charcoal-800 border border-charcoal-700/60 px-3 py-1.5 rounded-xl transition max-w-[calc(100vw-5rem)] md:max-w-md"
           title="Click to change site"
         >
-          <div className="w-7 h-7 rounded-full bg-construction-500/20 text-construction-400 flex items-center justify-center font-bold">
+          <div className="w-7 h-7 rounded-full bg-construction-500/20 text-construction-400 flex items-center justify-center font-bold shrink-0">
             <MapPin className="w-4 h-4" />
           </div>
-          <div>
-            <div className="text-xs text-charcoal-400 font-medium leading-none">Current Site</div>
-            <div className="text-sm font-semibold text-slate-100 group-hover:text-construction-400 transition flex items-center gap-1.5 mt-0.5">
-              <span>{currentSite ? currentSite.name : 'No Site Selected'}</span>
-              <ChevronDown className="w-3.5 h-3.5 text-charcoal-400 group-hover:text-construction-400" />
+          <div className="min-w-0">
+            <div className="text-[10px] text-charcoal-400 font-medium leading-none">Current Site</div>
+            <div className="text-sm font-bold text-slate-100 group-hover:text-construction-400 transition flex items-center gap-1.5 mt-0.5 truncate">
+              <span className="truncate">{currentSite ? currentSite.name : 'No Site Selected'}</span>
+              <ChevronDown className="w-3.5 h-3.5 text-charcoal-400 group-hover:text-construction-400 shrink-0" />
             </div>
           </div>
         </button>
       </div>
 
-      {/* Right: Quick Voice CTA, Offline status, Lock */}
-      <div className="flex items-center space-x-2 sm:space-x-3">
+      {/* Right: Controls hidden on mobile, visible on desktop (md:flex) */}
+      <div className="hidden md:flex items-center space-x-2 sm:space-x-3">
         {/* Offline indicator */}
         <div
           className={`flex items-center space-x-1.5 px-2.5 py-1 rounded-full text-xs font-medium border ${
