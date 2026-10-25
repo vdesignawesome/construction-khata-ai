@@ -109,7 +109,7 @@ export const App: React.FC = () => {
       <div className="flex-1 flex flex-col min-w-0">
         <Header onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
 
-        <main className="flex-1 p-3 sm:p-5 md:p-6 max-w-7xl w-full mx-auto">
+        <main className="flex-1 p-3 sm:p-5 md:p-6 max-w-7xl w-full mx-auto pb-24 md:pb-6">
           {activeTab === 'dashboard' && <SiteDashboard />}
           {activeTab === 'accounts' && <AccountsView />}
           {activeTab === 'materials' && <MaterialsView />}

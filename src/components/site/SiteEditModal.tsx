@@ -83,15 +83,15 @@ export const SiteEditModal: React.FC<SiteEditModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm overflow-y-auto">
-      <div className="bg-charcoal-900 border border-charcoal-700 rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden my-auto animate-in zoom-in-95">
-        <div className="p-5 border-b border-charcoal-800 bg-charcoal-950 flex items-center justify-between">
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/80 backdrop-blur-sm overflow-hidden">
+      <div className="bg-charcoal-900 border border-charcoal-700 rounded-t-3xl sm:rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden animate-in slide-in-from-bottom-4 sm:zoom-in-95 max-h-[92vh] flex flex-col">
+        <div className="p-4 sm:p-5 border-b border-charcoal-800 bg-charcoal-950 flex items-center justify-between shrink-0">
           <div className="flex items-center space-x-2.5">
             <div className="p-2 bg-construction-500/20 text-construction-400 rounded-xl">
               <Building2 className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-lg font-bold text-white">Edit Site Details</h3>
+              <h3 className="text-base sm:text-lg font-bold text-white">Edit Site Details</h3>
               <p className="text-xs text-charcoal-400">Update project name, client, location or budget</p>
             </div>
           </div>
@@ -104,7 +104,7 @@ export const SiteEditModal: React.FC<SiteEditModalProps> = ({
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-6 space-y-4">
+        <form onSubmit={handleSubmit} className="p-4 sm:p-6 space-y-4 overflow-y-auto flex-1 custom-scrollbar">
           {error && (
             <div className="p-3 bg-red-950/60 border border-red-800/80 text-red-300 rounded-xl text-xs font-semibold">
               {error}

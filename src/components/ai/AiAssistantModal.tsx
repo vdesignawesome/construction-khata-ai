@@ -462,8 +462,8 @@ export const AiAssistantModal: React.FC = () => {
   if (!isAiModalOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md overflow-y-auto">
-      <div className="bg-charcoal-900 border border-charcoal-700 rounded-2xl w-full max-w-xl shadow-2xl flex flex-col overflow-hidden my-auto animate-in zoom-in-95">
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/80 backdrop-blur-md overflow-hidden">
+      <div className="bg-charcoal-900 border border-charcoal-700 rounded-t-3xl sm:rounded-2xl w-full max-w-xl shadow-2xl flex flex-col overflow-hidden max-h-[92vh] animate-in slide-in-from-bottom-4 sm:zoom-in-95">
         {/* Header */}
         <div className="p-5 border-b border-charcoal-800 bg-charcoal-950 flex items-center justify-between">
           <div className="flex items-center space-x-3">

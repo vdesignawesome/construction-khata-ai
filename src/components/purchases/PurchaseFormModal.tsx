@@ -442,8 +442,8 @@ export const PurchaseFormModal: React.FC<PurchaseFormModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/85 backdrop-blur-md overflow-y-auto">
-      <div className="bg-charcoal-900 border border-charcoal-700 rounded-3xl w-full max-w-[96vw] lg:max-w-5xl xl:max-w-6xl shadow-2xl overflow-hidden my-auto animate-in zoom-in-95 flex flex-col max-h-[94vh]">
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/85 backdrop-blur-md overflow-hidden">
+      <div className="bg-charcoal-900 border border-charcoal-700 rounded-t-3xl sm:rounded-3xl w-full max-w-full sm:max-w-[96vw] lg:max-w-5xl xl:max-w-6xl shadow-2xl overflow-hidden flex flex-col h-[94vh] sm:h-auto sm:max-h-[92vh] animate-in slide-in-from-bottom-4 sm:zoom-in-95 duration-200">
         {/* Header */}
         <div className="p-4 sm:p-5 border-b border-charcoal-800 bg-charcoal-950 flex items-center justify-between shrink-0">
           <div className="flex items-center space-x-3">
@@ -475,7 +475,8 @@ export const PurchaseFormModal: React.FC<PurchaseFormModalProps> = ({
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-4 sm:p-6 space-y-5 overflow-y-auto custom-scrollbar flex-1">
+        <form onSubmit={handleSubmit} className="flex-1 flex flex-col min-h-0 overflow-hidden">
+          <div className="p-3.5 sm:p-6 space-y-4 sm:space-y-5 overflow-y-auto custom-scrollbar flex-1 overscroll-contain">
           {error && (
             <div className="p-3.5 bg-red-950/60 border border-red-800 text-red-300 rounded-2xl text-xs flex items-center gap-2">
               <AlertCircle className="w-4 h-4 shrink-0" />
@@ -899,22 +900,30 @@ export const PurchaseFormModal: React.FC<PurchaseFormModalProps> = ({
             </div>
           </div>
 
-          {/* Footer Actions */}
-          <div className="pt-3 flex items-center justify-end space-x-3 border-t border-charcoal-800 shrink-0">
-            <button
-              type="button"
-              onClick={onClose}
-              className="px-5 py-2.5 text-xs font-bold text-charcoal-400 hover:text-white hover:bg-charcoal-800 rounded-xl transition"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="bg-construction-500 hover:bg-construction-400 text-charcoal-950 font-black px-6 py-2.5 rounded-xl text-xs transition shadow-lg active:scale-95 disabled:opacity-50"
-            >
-              {isSubmitting ? 'Saving...' : purchaseToEdit ? 'Save Changes' : 'Save Purchase Bill'}
-            </button>
+          </div>
+
+          {/* Sticky Pinned Footer Actions */}
+          <div className="p-3 sm:p-4 bg-charcoal-950 border-t border-charcoal-800 flex items-center justify-between sm:justify-end gap-3 shrink-0 safe-area-bottom">
+            <div className="text-left sm:hidden">
+              <div className="text-[10px] text-charcoal-400">Total: <strong className="text-construction-400 font-extrabold">{formatCurrency(grandTotal)}</strong></div>
+              <div className="text-[10px] text-amber-400 font-bold">Pending: {formatCurrency(pendingAmount)}</div>
+            </div>
+            <div className="flex items-center space-x-2">
+              <button
+                type="button"
+                onClick={onClose}
+                className="px-4 py-2.5 text-xs font-bold text-charcoal-400 hover:text-white hover:bg-charcoal-800 rounded-xl transition"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="bg-construction-500 hover:bg-construction-400 text-charcoal-950 font-black px-5 py-2.5 rounded-xl text-xs transition shadow-lg active:scale-95 disabled:opacity-50"
+              >
+                {isSubmitting ? 'Saving...' : purchaseToEdit ? 'Save Changes' : 'Save Purchase Bill'}
+              </button>
+            </div>
           </div>
         </form>
 

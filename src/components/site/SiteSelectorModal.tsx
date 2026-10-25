@@ -143,8 +143,8 @@ export const SiteSelectorModal: React.FC = () => {
 
   return (
     <>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md overflow-y-auto">
-        <div className="bg-charcoal-900 border border-charcoal-700/80 rounded-2xl w-full max-w-2xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden my-auto animate-in zoom-in-95 duration-200">
+      <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/80 backdrop-blur-md overflow-hidden">
+        <div className="bg-charcoal-900 border border-charcoal-700/80 rounded-t-3xl sm:rounded-2xl w-full max-w-2xl h-[92vh] sm:h-auto sm:max-h-[90vh] flex flex-col shadow-2xl overflow-hidden animate-in slide-in-from-bottom-4 sm:zoom-in-95 duration-200">
           {/* Header */}
           <div className="p-6 border-b border-charcoal-800 bg-charcoal-950/60 flex items-start justify-between">
             <div className="flex items-center space-x-3.5">

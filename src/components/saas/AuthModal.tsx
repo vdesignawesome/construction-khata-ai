@@ -342,8 +342,8 @@ export const AuthModal: React.FC = () => {
 
   // Otherwise, user is NOT logged in: Show the Login / Register Form
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md overflow-y-auto">
-      <div className="bg-charcoal-900 border border-charcoal-700 rounded-3xl w-full max-w-md shadow-2xl overflow-hidden my-auto animate-in zoom-in-95">
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/80 backdrop-blur-md overflow-hidden">
+      <div className="bg-charcoal-900 border border-charcoal-700 rounded-t-3xl sm:rounded-3xl w-full max-w-md shadow-2xl overflow-hidden max-h-[92vh] flex flex-col animate-in slide-in-from-bottom-4 sm:zoom-in-95">
         {/* Banner with 4-Month Free Offer */}
         <div className="bg-gradient-to-r from-construction-600 via-amber-500 to-construction-500 p-5 text-charcoal-950 relative">
           <div className="flex items-center space-x-2 text-xs font-black uppercase tracking-wider bg-black/15 px-2.5 py-1 rounded-full w-fit mb-2">
@@ -387,7 +387,7 @@ export const AuthModal: React.FC = () => {
         </div>
 
         {/* Form Body */}
-        <div className="p-6 space-y-4">
+        <div className="p-4 sm:p-6 space-y-4 overflow-y-auto flex-1 custom-scrollbar">
           {errorMsg && (
             <div className="p-3 bg-red-950/60 border border-red-800 text-red-300 text-xs rounded-xl">
               {errorMsg}
