@@ -38,6 +38,50 @@ export const PaymentFormModal: React.FC<PaymentFormModalProps> = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
 
+  // Quick Add Account state
+  const [showAddAccount, setShowAddAccount] = useState(false);
+  const [newAccountType, setNewAccountType] = useState<'supplier' | 'labour'>('supplier');
+  const [newAccountName, setNewAccountName] = useState('');
+  const [newAccountPhone, setNewAccountPhone] = useState('');
+  const [isCreatingAccount, setIsCreatingAccount] = useState(false);
+
+  const handleCreateAccount = async () => {
+    if (!currentSiteId) return;
+    if (!newAccountName.trim()) {
+      setError('Please enter account name');
+      return;
+    }
+    setIsCreatingAccount(true);
+    setError('');
+    try {
+      const newAcc: Account = {
+        id: 'acc_' + Date.now(),
+        siteId: currentSiteId,
+        type: newAccountType,
+        name: newAccountName.trim(),
+        phone: newAccountPhone.trim() || undefined,
+        openingBalance: 0,
+        status: 'active',
+        createdAt: Date.now(),
+        updatedAt: Date.now()
+      };
+      await db.accounts.add(newAcc);
+      const updatedAccounts = [...accounts, newAcc];
+      setAccounts(updatedAccounts);
+      setAccountId(newAcc.id);
+      setSelectedType('all');
+      setNewAccountName('');
+      setNewAccountPhone('');
+      setShowAddAccount(false);
+      showToast(`${newAccountType === 'supplier' ? 'Supplier' : 'Labour'} "${newAcc.name}" created and selected!`, 'success');
+    } catch (err: any) {
+      console.error(err);
+      setError(err?.message || 'Failed to create account');
+    } finally {
+      setIsCreatingAccount(false);
+    }
+  };
+
   useEffect(() => {
     if (isOpen && currentSiteId) {
       loadAccounts();
@@ -161,41 +205,115 @@ export const PaymentFormModal: React.FC<PaymentFormModalProps> = ({
             </div>
           )}
 
-          {/* Account Filter Type */}
+          {/* Account Filter Type & Quick Add */}
           <div>
-            <div className="flex gap-2 mb-2">
-              {(['all', 'supplier', 'labour'] as const).map((t) => (
-                <button
-                  key={t}
-                  type="button"
-                  onClick={() => setSelectedType(t)}
-                  className={`px-3 py-1 rounded-lg text-xs font-bold capitalize transition ${
-                    selectedType === t
-                      ? 'bg-construction-500 text-charcoal-950'
-                      : 'bg-charcoal-800 text-charcoal-300 hover:text-white'
-                  }`}
-                >
-                  {t === 'all' ? 'All Accounts' : t}
-                </button>
-              ))}
+            <div className="flex items-center justify-between mb-2">
+              <div className="flex gap-2">
+                {(['all', 'supplier', 'labour'] as const).map((t) => (
+                  <button
+                    key={t}
+                    type="button"
+                    onClick={() => setSelectedType(t)}
+                    className={`px-3 py-1 rounded-lg text-xs font-bold capitalize transition ${
+                      selectedType === t
+                        ? 'bg-construction-500 text-charcoal-950'
+                        : 'bg-charcoal-800 text-charcoal-300 hover:text-white'
+                    }`}
+                  >
+                    {t === 'all' ? 'All Accounts' : t}
+                  </button>
+                ))}
+              </div>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setShowAddAccount(!showAddAccount);
+                  setError('');
+                }}
+                className="text-xs text-construction-400 hover:text-construction-300 font-bold flex items-center gap-1 active:scale-95 transition"
+              >
+                {showAddAccount ? '✕ Cancel' : '+ New Account'}
+              </button>
             </div>
 
-            <label className="block text-xs font-semibold text-charcoal-300 mb-1">
-              Select Recipient Account *
-            </label>
-            <select
-              required
-              value={accountId}
-              onChange={(e) => setAccountId(e.target.value)}
-              className="w-full bg-charcoal-800 border border-charcoal-700 rounded-xl p-2.5 text-xs sm:text-sm text-white focus:outline-none focus:border-construction-500"
-            >
-              <option value="">-- Choose Account --</option>
-              {filteredAccounts.map((a) => (
-                <option key={a.id} value={a.id}>
-                  {a.name} ({a.type.toUpperCase()}) {a.phone ? `• ${a.phone}` : ''}
-                </option>
-              ))}
-            </select>
+            {/* Quick Add Account Panel */}
+            {showAddAccount ? (
+              <div className="bg-charcoal-950/80 border border-construction-500/40 rounded-2xl p-3.5 space-y-3 mb-3 animate-in zoom-in-95 duration-150">
+                <div className="flex items-center justify-between pb-1.5 border-b border-charcoal-800">
+                  <span className="text-xs font-black text-white">Create New Account (नया खाता)</span>
+                  <div className="flex bg-charcoal-900 rounded-lg p-0.5 border border-charcoal-800">
+                    <button
+                      type="button"
+                      onClick={() => setNewAccountType('supplier')}
+                      className={`px-2.5 py-1 text-[11px] font-bold rounded-md transition ${
+                        newAccountType === 'supplier'
+                          ? 'bg-construction-500 text-charcoal-950'
+                          : 'text-charcoal-400 hover:text-white'
+                      }`}
+                    >
+                      Supplier (सप्लायर)
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setNewAccountType('labour')}
+                      className={`px-2.5 py-1 text-[11px] font-bold rounded-md transition ${
+                        newAccountType === 'labour'
+                          ? 'bg-construction-500 text-charcoal-950'
+                          : 'text-charcoal-400 hover:text-white'
+                      }`}
+                    >
+                      Labour (कारीगर/लेबर)
+                    </button>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                  <input
+                    type="text"
+                    placeholder={newAccountType === 'supplier' ? 'e.g. Goyal Hardware' : 'e.g. Ramesh Mistry'}
+                    value={newAccountName}
+                    onChange={(e) => setNewAccountName(e.target.value)}
+                    className="bg-charcoal-800 border border-charcoal-700 rounded-xl px-3 py-2 text-xs text-white placeholder-charcoal-500 focus:outline-none focus:border-construction-500"
+                  />
+                  <input
+                    type="tel"
+                    placeholder="Mobile No. (optional)"
+                    value={newAccountPhone}
+                    onChange={(e) => setNewAccountPhone(e.target.value)}
+                    className="bg-charcoal-800 border border-charcoal-700 rounded-xl px-3 py-2 text-xs text-white placeholder-charcoal-500 focus:outline-none focus:border-construction-500"
+                  />
+                </div>
+
+                <button
+                  type="button"
+                  disabled={isCreatingAccount}
+                  onClick={handleCreateAccount}
+                  className="w-full bg-construction-500 hover:bg-construction-400 text-charcoal-950 font-black py-2 rounded-xl text-xs transition shadow active:scale-95 disabled:opacity-50"
+                >
+                  {isCreatingAccount ? 'Creating...' : `✓ Save & Select ${newAccountType === 'supplier' ? 'Supplier' : 'Labour'}`}
+                </button>
+              </div>
+            ) : (
+              <>
+                <label className="block text-xs font-semibold text-charcoal-300 mb-1">
+                  Select Recipient Account *
+                </label>
+                <select
+                  required
+                  value={accountId}
+                  onChange={(e) => setAccountId(e.target.value)}
+                  className="w-full bg-charcoal-800 border border-charcoal-700 rounded-xl p-2.5 text-xs sm:text-sm text-white focus:outline-none focus:border-construction-500"
+                >
+                  <option value="">-- Choose Account --</option>
+                  {filteredAccounts.map((a) => (
+                    <option key={a.id} value={a.id}>
+                      {a.name} ({a.type.toUpperCase()}) {a.phone ? `• ${a.phone}` : ''}
+                    </option>
+                  ))}
+                </select>
+              </>
+            )}
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">

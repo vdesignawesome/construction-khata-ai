@@ -1,8 +1,15 @@
-const CACHE_NAME = 'construction-khata-v5';
+const CACHE_NAME = 'construction-khata-v6';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
-  '/manifest.json'
+  '/manifest.json',
+  '/logo.svg',
+  '/favicon.ico',
+  '/icon-192.png',
+  '/icon-512.png',
+  '/icon-maskable-192.png',
+  '/icon-maskable-512.png',
+  '/apple-touch-icon.png'
 ];
 
 self.addEventListener('install', (event) => {

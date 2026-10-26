@@ -8,7 +8,8 @@ import {
   Calendar,
   Layers,
   Trash2,
-  Edit2
+  Edit2,
+  UserPlus
 } from 'lucide-react';
 import { db } from '../../db';
 import { useAppStore } from '../../store/useAppStore';
@@ -16,6 +17,7 @@ import { deletePayment } from '../../engine/accounting';
 import { formatCurrency, formatDate } from '../../utils/formatters';
 import type { Payment } from '../../types';
 import { PaymentFormModal } from './PaymentFormModal';
+import { AccountFormModal } from '../accounts/AccountFormModal';
 
 export const PaymentsView: React.FC = () => {
   const { currentSite, currentSiteId, refreshTrigger, showToast } = useAppStore();
@@ -27,6 +29,7 @@ export const PaymentsView: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [paymentToEdit, setPaymentToEdit] = useState<Payment | null>(null);
+  const [isAccountModalOpen, setIsAccountModalOpen] = useState(false);
 
   useEffect(() => {
     if (currentSiteId) {
@@ -97,16 +100,27 @@ export const PaymentsView: React.FC = () => {
           </p>
         </div>
 
-        <button
-          onClick={() => {
-            setPaymentToEdit(null);
-            setIsModalOpen(true);
-          }}
-          className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm flex items-center justify-center space-x-2 shadow transition active:scale-95"
-        >
-          <Plus className="w-4 h-4" />
-          <span>Record Payment</span>
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setIsAccountModalOpen(true)}
+            className="bg-charcoal-800 hover:bg-charcoal-700 text-construction-300 border border-charcoal-700 font-bold px-3.5 py-2.5 rounded-xl text-xs sm:text-sm flex items-center justify-center space-x-1.5 transition active:scale-95 shadow-sm"
+            title="Add new supplier or labour account"
+          >
+            <UserPlus className="w-4 h-4 text-construction-400" />
+            <span>+ Add Account</span>
+          </button>
+
+          <button
+            onClick={() => {
+              setPaymentToEdit(null);
+              setIsModalOpen(true);
+            }}
+            className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm flex items-center justify-center space-x-2 shadow transition active:scale-95"
+          >
+            <Plus className="w-4 h-4" />
+            <span>Record Payment</span>
+          </button>
+        </div>
       </div>
 
       {/* Summary Card */}
@@ -244,6 +258,17 @@ export const PaymentsView: React.FC = () => {
             setIsModalOpen(false);
             setPaymentToEdit(null);
             loadPayments();
+          }}
+        />
+      )}
+
+      {isAccountModalOpen && (
+        <AccountFormModal
+          isOpen={isAccountModalOpen}
+          onClose={() => setIsAccountModalOpen(false)}
+          onSuccess={() => {
+            setIsAccountModalOpen(false);
+            showToast('Account created successfully!', 'success');
           }}
         />
       )}
