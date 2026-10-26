@@ -19,6 +19,7 @@ import {
   getDocs,
   updateDoc,
   deleteDoc,
+  onSnapshot,
   type Firestore
 } from 'firebase/firestore';
 import type { FirebaseConfig, SaasTenant, SaasUser } from '../types/saas';
@@ -436,6 +437,28 @@ export async function saasSignOut() {
 
 // ----------------- SUPER ADMIN CAPABILITIES -----------------
 
+export function subscribeToSaaSTenants(callback: (tenants: SaasTenant[]) => void): () => void {
+  const { db, isLive } = initFirebaseService();
+  if (isLive && db) {
+    try {
+      const unsub = onSnapshot(collection(db, 'tenants'), (snap) => {
+        const list: SaasTenant[] = [];
+        snap.forEach(d => list.push(d.data() as SaasTenant));
+        if (list.length > 0) {
+          saveLocalTenants(list);
+          callback(list);
+        }
+      }, (err) => {
+        console.warn('Realtime tenants listener error:', err);
+      });
+      return unsub;
+    } catch (e) {
+      console.warn('Could not setup realtime tenants listener:', e);
+    }
+  }
+  return () => {};
+}
+
 export async function fetchAllSaaSTenants(): Promise<SaasTenant[]> {
   const { db, isLive } = initFirebaseService();
   if (isLive && db) {
@@ -443,7 +466,10 @@ export async function fetchAllSaaSTenants(): Promise<SaasTenant[]> {
       const snap = await getDocs(collection(db, 'tenants'));
       const list: SaasTenant[] = [];
       snap.forEach(d => list.push(d.data() as SaasTenant));
-      if (list.length > 0) return list;
+      if (list.length > 0) {
+        saveLocalTenants(list);
+        return list;
+      }
     } catch (e) {
       console.warn('Firestore fetch failed:', e);
     }

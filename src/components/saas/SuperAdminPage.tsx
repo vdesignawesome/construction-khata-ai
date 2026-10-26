@@ -34,7 +34,8 @@ import { useAppStore } from '../../store/useAppStore';
 import {
   getSavedFirebaseConfig,
   saveFirebaseConfig,
-  initFirebaseService
+  initFirebaseService,
+  subscribeToSaaSTenants
 } from '../../services/firebase';
 import {
   getAllInvoices,
@@ -111,12 +112,16 @@ export const SuperAdminPage: React.FC<SuperAdminPageProps> = ({ onBack }) => {
   useEffect(() => {
     if (isAuthenticated) {
       refreshTenants();
+      const unsub = subscribeToSaaSTenants((liveTenants) => {
+        useSaasStore.setState({ allTenants: liveTenants });
+      });
       setInvoices(getAllInvoices());
       setRazorpayConfig(getRazorpayConfig());
       const cfg = getSavedFirebaseConfig();
       if (cfg) setFbConfig(cfg);
       const { isLive } = initFirebaseService();
       setIsFirebaseLive(isLive);
+      return () => unsub();
     }
   }, [isAuthenticated, activeTab]);
 
