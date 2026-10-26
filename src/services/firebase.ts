@@ -24,6 +24,8 @@ import {
 } from 'firebase/firestore';
 import type { FirebaseConfig, SaasTenant, SaasUser } from '../types/saas';
 import { TRIAL_DURATION_DAYS } from '../types/saas';
+import { db as localDb } from '../db';
+import type { Site } from '../types';
 
 const STORAGE_KEY_FIREBASE = 'construction_khata_firebase_config';
 const STORAGE_KEY_LOCAL_USERS = 'construction_khata_saas_users';
@@ -528,4 +530,141 @@ export async function deleteTenantByAdmin(tenantId: string) {
       saveCurrentSession(null, null);
     }
   }
+}
+
+// ----------------- SITE CLOUD SYNC & MULTI-DEVICE SUPPORT -----------------
+
+export async function syncSiteToCloud(site: Site, tenantId: string): Promise<void> {
+  const { db, isLive } = initFirebaseService();
+  if (!isLive || !db || !tenantId) return;
+
+  try {
+    const siteRef = doc(db, 'tenants', tenantId, 'sites', site.id);
+    await setDoc(siteRef, {
+      ...site,
+      updatedAt: site.updatedAt || Date.now()
+    }, { merge: true });
+  } catch (e) {
+    console.warn('Failed to sync site to Firestore:', e);
+  }
+}
+
+export async function deleteSiteFromCloud(siteId: string, tenantId: string): Promise<void> {
+  const { db, isLive } = initFirebaseService();
+  if (!isLive || !db || !tenantId) return;
+
+  try {
+    const siteRef = doc(db, 'tenants', tenantId, 'sites', siteId);
+    await deleteDoc(siteRef);
+  } catch (e) {
+    console.warn('Failed to delete site from Firestore:', e);
+  }
+}
+
+export async function fetchTenantSitesFromCloud(tenantId: string): Promise<Site[]> {
+  const { db, isLive } = initFirebaseService();
+  if (!isLive || !db || !tenantId) return [];
+
+  const demoIds = ['site_sec35', 'site_modeltown', 'site_shopmain'];
+  try {
+    const sitesSnap = await getDocs(collection(db, 'tenants', tenantId, 'sites'));
+    const sites: Site[] = [];
+    sitesSnap.forEach(d => {
+      const data = d.data() as Site;
+      if (data && data.id && !demoIds.includes(data.id)) {
+        sites.push(data);
+      }
+    });
+    return sites;
+  } catch (e) {
+    console.warn('Failed to fetch sites from Firestore:', e);
+    return [];
+  }
+}
+
+export async function syncTenantSitesWithLocal(tenantId: string): Promise<Site[]> {
+  const demoIds = ['site_sec35', 'site_modeltown', 'site_shopmain'];
+  const localSites = (await localDb.sites.toArray()).filter(s => !demoIds.includes(s.id));
+
+  const { db, isLive } = initFirebaseService();
+  if (!isLive || !db || !tenantId) {
+    return localSites;
+  }
+
+  try {
+    const cloudSites = await fetchTenantSitesFromCloud(tenantId);
+    const cloudMap = new Map<string, Site>(cloudSites.map(s => [s.id, s]));
+
+    // 1. Upload local sites that are not in cloud or newer
+    for (const localSite of localSites) {
+      const cloudSite = cloudMap.get(localSite.id);
+      if (!cloudSite || (localSite.updatedAt || 0) > (cloudSite.updatedAt || 0)) {
+        await setDoc(doc(db, 'tenants', tenantId, 'sites', localSite.id), localSite, { merge: true });
+        cloudMap.set(localSite.id, localSite);
+      }
+    }
+
+    // 2. Download cloud sites that are not in local or newer
+    for (const cloudSite of cloudMap.values()) {
+      const localExisting = await localDb.sites.get(cloudSite.id);
+      if (!localExisting || (cloudSite.updatedAt || 0) > (localExisting.updatedAt || 0)) {
+        await localDb.sites.put(cloudSite);
+      }
+    }
+
+    return (await localDb.sites.toArray()).filter(s => !demoIds.includes(s.id));
+  } catch (e) {
+    console.warn('Sync between Firestore and local DB failed:', e);
+    return localSites;
+  }
+}
+
+let activeSitesUnsubscribe: (() => void) | null = null;
+
+export function subscribeTenantSites(
+  tenantId: string,
+  onSitesChanged?: (sites: Site[]) => void
+): () => void {
+  if (activeSitesUnsubscribe) {
+    activeSitesUnsubscribe();
+    activeSitesUnsubscribe = null;
+  }
+
+  const { db, isLive } = initFirebaseService();
+  if (!isLive || !db || !tenantId) return () => {};
+
+  const demoIds = ['site_sec35', 'site_modeltown', 'site_shopmain'];
+  const sitesRef = collection(db, 'tenants', tenantId, 'sites');
+
+  activeSitesUnsubscribe = onSnapshot(sitesRef, async (snapshot) => {
+    try {
+      let changed = false;
+      for (const change of snapshot.docChanges()) {
+        const docId = change.doc.id;
+        if (demoIds.includes(docId)) continue;
+
+        if (change.type === 'removed') {
+          await localDb.sites.delete(docId);
+          changed = true;
+        } else {
+          const siteData = change.doc.data() as Site;
+          if (siteData && siteData.id) {
+            await localDb.sites.put(siteData);
+            changed = true;
+          }
+        }
+      }
+
+      if (changed && onSitesChanged) {
+        const updatedLocal = (await localDb.sites.toArray()).filter(s => !demoIds.includes(s.id));
+        onSitesChanged(updatedLocal);
+      }
+    } catch (err) {
+      console.warn('Real-time site sync error:', err);
+    }
+  }, (err) => {
+    console.warn('Firestore sites onSnapshot error:', err);
+  });
+
+  return activeSitesUnsubscribe;
 }

@@ -10,7 +10,9 @@ import {
   saasSignOut,
   fetchAllSaaSTenants,
   updateTenantPlanByAdmin,
-  deleteTenantByAdmin
+  deleteTenantByAdmin,
+  syncTenantSitesWithLocal,
+  subscribeTenantSites
 } from '../services/firebase';
 import { db } from '../db';
 import { useAppStore } from './useAppStore';
@@ -67,6 +69,16 @@ export const useSaasStore = create<SaasState>((set, get) => ({
     const session = getCurrentSession();
     if (session) {
       set({ currentUser: session.user, currentTenant: session.tenant, isAuthModalOpen: false });
+      try {
+        await syncTenantSitesWithLocal(session.tenant.id);
+        await useAppStore.getState().loadInitialData();
+        subscribeTenantSites(session.tenant.id, async () => {
+          await useAppStore.getState().loadInitialData();
+          useAppStore.getState().triggerRefresh();
+        });
+      } catch (e) {
+        console.warn('Initial site sync error:', e);
+      }
     } else {
       set({ currentUser: null, currentTenant: null, isAuthModalOpen: true });
     }
@@ -82,6 +94,16 @@ export const useSaasStore = create<SaasState>((set, get) => ({
     try {
       const { user, tenant } = await saasLoginUser(email, password);
       set({ currentUser: user, currentTenant: tenant, isAuthModalOpen: false });
+      try {
+        await syncTenantSitesWithLocal(tenant.id);
+        await useAppStore.getState().loadInitialData();
+        subscribeTenantSites(tenant.id, async () => {
+          await useAppStore.getState().loadInitialData();
+          useAppStore.getState().triggerRefresh();
+        });
+      } catch (e) {
+        console.warn('Login site sync error:', e);
+      }
       useAppStore.getState().setSiteSelectorOpen(true);
     } finally {
       set({ isLoading: false });
@@ -93,6 +115,16 @@ export const useSaasStore = create<SaasState>((set, get) => ({
     try {
       const { user, tenant } = await saasLoginWithGoogle();
       set({ currentUser: user, currentTenant: tenant, isAuthModalOpen: false });
+      try {
+        await syncTenantSitesWithLocal(tenant.id);
+        await useAppStore.getState().loadInitialData();
+        subscribeTenantSites(tenant.id, async () => {
+          await useAppStore.getState().loadInitialData();
+          useAppStore.getState().triggerRefresh();
+        });
+      } catch (e) {
+        console.warn('Google login site sync error:', e);
+      }
       useAppStore.getState().setSiteSelectorOpen(true);
     } finally {
       set({ isLoading: false });
@@ -104,6 +136,16 @@ export const useSaasStore = create<SaasState>((set, get) => ({
     try {
       const { user, tenant } = await saasRegisterContractor(params);
       set({ currentUser: user, currentTenant: tenant, isAuthModalOpen: false });
+      try {
+        await syncTenantSitesWithLocal(tenant.id);
+        await useAppStore.getState().loadInitialData();
+        subscribeTenantSites(tenant.id, async () => {
+          await useAppStore.getState().loadInitialData();
+          useAppStore.getState().triggerRefresh();
+        });
+      } catch (e) {
+        console.warn('Register site sync error:', e);
+      }
       useAppStore.getState().setSiteSelectorOpen(true);
     } finally {
       set({ isLoading: false });

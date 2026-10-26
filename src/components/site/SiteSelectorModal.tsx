@@ -19,6 +19,7 @@ import type { Site, SiteFinancialSummary } from '../../types';
 import { SiteCreateModal } from './SiteCreateModal';
 import { SiteEditModal } from './SiteEditModal';
 import { useSaasStore } from '../../store/useSaasStore';
+import { syncTenantSitesWithLocal, deleteSiteFromCloud } from '../../services/firebase';
 
 interface SiteWithFinancials {
   site: Site;
@@ -67,6 +68,13 @@ export const SiteSelectorModal: React.FC = () => {
   const loadSites = async () => {
     setIsLoading(true);
     try {
+      if (currentTenant?.id) {
+        try {
+          await syncTenantSitesWithLocal(currentTenant.id);
+        } catch (e) {
+          console.warn('Sync failed during loadSites:', e);
+        }
+      }
       const allSites = await db.sites.orderBy('createdAt').reverse().toArray();
       const realSites = allSites.filter(s => !['site_sec35', 'site_modeltown', 'site_shopmain'].includes(s.id));
       const withFinancials: SiteWithFinancials[] = [];
@@ -125,6 +133,11 @@ export const SiteSelectorModal: React.FC = () => {
         if (currentSiteId === siteId) {
           await setCurrentSiteId(null);
         }
+
+        if (currentTenant?.id) {
+          await deleteSiteFromCloud(siteId, currentTenant.id);
+        }
+
         showToast(`Site "${siteName}" deleted.`, 'info');
         await loadSites();
       } catch (err) {

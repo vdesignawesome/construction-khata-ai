@@ -3,6 +3,8 @@ import { X, Building2, MapPin, User, IndianRupee } from 'lucide-react';
 import { db, logAudit, PREDEFINED_CATEGORIES, STANDARD_UNITS } from '../../db';
 import { loadStandardCatalogueForSite } from '../../data/standardCatalogue';
 import type { Site, Material } from '../../types';
+import { syncSiteToCloud } from '../../services/firebase';
+import { useSaasStore } from '../../store/useSaasStore';
 
 interface SiteCreateModalProps {
   isOpen: boolean;
@@ -51,6 +53,12 @@ export const SiteCreateModal: React.FC<SiteCreateModalProps> = ({
 
       await db.sites.add(newSite);
       await logAudit(siteId, 'site', siteId, 'create', null, newSite);
+
+      // Sync site to cloud for multi-device sync
+      const currentTenant = useSaasStore.getState().currentTenant;
+      if (currentTenant?.id) {
+        await syncSiteToCloud(newSite, currentTenant.id);
+      }
 
       // Pre-seed standard construction catalogue (Sanitary, Electrical, Cement, Steel, etc.)
       if (seedStarterMaterials) {

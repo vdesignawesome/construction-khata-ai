@@ -3,6 +3,8 @@ import { X, Building2, MapPin, User, IndianRupee, Calendar, CheckCircle2 } from 
 import { db, logAudit } from '../../db';
 import { useAppStore } from '../../store/useAppStore';
 import type { Site, SiteStatus } from '../../types';
+import { syncSiteToCloud } from '../../services/firebase';
+import { useSaasStore } from '../../store/useSaasStore';
 
 interface SiteEditModalProps {
   isOpen: boolean;
@@ -65,6 +67,15 @@ export const SiteEditModal: React.FC<SiteEditModalProps> = ({
 
       await db.sites.update(site.id, updatedFields);
       await logAudit(site.id, 'site', site.id, 'update', site, updatedFields);
+
+      // Sync site to cloud for multi-device sync
+      const currentTenant = useSaasStore.getState().currentTenant;
+      if (currentTenant?.id) {
+        const fullSite = await db.sites.get(site.id);
+        if (fullSite) {
+          await syncSiteToCloud(fullSite, currentTenant.id);
+        }
+      }
 
       // If this site is currently active, refresh currentSite in store
       if (currentSiteId === site.id) {
