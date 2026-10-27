@@ -9,7 +9,9 @@ import {
   FileText,
   AlertTriangle,
   Trash2,
-  Edit2
+  Edit2,
+  Camera,
+  Sparkles
 } from 'lucide-react';
 import { db } from '../../db';
 import { useAppStore } from '../../store/useAppStore';
@@ -18,6 +20,8 @@ import { formatCurrency, formatDate } from '../../utils/formatters';
 import type { Purchase } from '../../types';
 import { PurchaseFormModal } from './PurchaseFormModal';
 import { PaymentFormModal } from '../payments/PaymentFormModal';
+import { AiBillScannerModal } from './AiBillScannerModal';
+import type { ScannedBillResult } from '../../services/geminiBillScanner';
 
 export const PurchasesView: React.FC = () => {
   const { currentSite, currentSiteId, refreshTrigger, showToast } = useAppStore();
@@ -32,6 +36,8 @@ export const PurchasesView: React.FC = () => {
   const [purchaseToEdit, setPurchaseToEdit] = useState<Purchase | null>(null);
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
   const [selectedPurchaseForPayment, setSelectedPurchaseForPayment] = useState<Purchase | null>(null);
+  const [isScannerOpen, setIsScannerOpen] = useState(false);
+  const [scannedBillData, setScannedBillData] = useState<ScannedBillResult | null>(null);
 
   useEffect(() => {
     if (currentSiteId) {
@@ -107,16 +113,28 @@ export const PurchasesView: React.FC = () => {
           </p>
         </div>
 
-        <button
-          onClick={() => {
-            setPurchaseToEdit(null);
-            setIsPurchaseModalOpen(true);
-          }}
-          className="bg-construction-500 hover:bg-construction-400 text-charcoal-950 font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm flex items-center justify-center space-x-2 shadow transition active:scale-95"
-        >
-          <Plus className="w-4 h-4" />
-          <span>New Purchase Bill</span>
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setIsScannerOpen(true)}
+            className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-black px-3.5 py-2.5 rounded-xl text-xs sm:text-sm flex items-center justify-center space-x-1.5 shadow-lg shadow-purple-950 transition active:scale-95 border border-purple-400/30"
+            title="Scan physical bill with AI"
+          >
+            <Camera className="w-4 h-4 text-purple-200" />
+            <span>📸 Scan Bill (AI)</span>
+          </button>
+
+          <button
+            onClick={() => {
+              setPurchaseToEdit(null);
+              setScannedBillData(null);
+              setIsPurchaseModalOpen(true);
+            }}
+            className="bg-construction-500 hover:bg-construction-400 text-charcoal-950 font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm flex items-center justify-center space-x-2 shadow transition active:scale-95"
+          >
+            <Plus className="w-4 h-4" />
+            <span>New Purchase Bill</span>
+          </button>
+        </div>
       </div>
 
       {/* Overview Cards */}
@@ -309,14 +327,30 @@ export const PurchasesView: React.FC = () => {
         <PurchaseFormModal
           isOpen={isPurchaseModalOpen}
           purchaseToEdit={purchaseToEdit}
+          initialScannedData={scannedBillData}
+          onOpenScanner={() => setIsScannerOpen(true)}
           onClose={() => {
             setIsPurchaseModalOpen(false);
             setPurchaseToEdit(null);
+            setScannedBillData(null);
           }}
           onSuccess={() => {
             setIsPurchaseModalOpen(false);
             setPurchaseToEdit(null);
+            setScannedBillData(null);
             loadPurchases();
+          }}
+        />
+      )}
+
+      {isScannerOpen && (
+        <AiBillScannerModal
+          isOpen={isScannerOpen}
+          onClose={() => setIsScannerOpen(false)}
+          onApplyBillData={(data) => {
+            setScannedBillData(data);
+            setPurchaseToEdit(null);
+            setIsPurchaseModalOpen(true);
           }}
         />
       )}

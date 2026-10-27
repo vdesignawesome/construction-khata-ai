@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { X, Plus, Trash2, ShoppingBag, AlertCircle } from 'lucide-react';
+import { X, Plus, Trash2, ShoppingBag, AlertCircle, Camera, Sparkles } from 'lucide-react';
 import { db, PREDEFINED_CATEGORIES, STANDARD_UNITS } from '../../db';
 import { useAppStore } from '../../store/useAppStore';
 import { createPurchase, updatePurchase } from '../../engine/accounting';
 import { formatCurrency } from '../../utils/formatters';
 import type { Account, Material, PaymentMode, Purchase } from '../../types';
+import type { ScannedBillResult } from '../../services/geminiBillScanner';
 
 interface PurchaseFormModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSuccess: () => void;
   purchaseToEdit?: Purchase | null;
+  initialScannedData?: ScannedBillResult | null;
+  onOpenScanner?: () => void;
 }
 
 interface FormLineItem {
@@ -44,7 +47,9 @@ export const PurchaseFormModal: React.FC<PurchaseFormModalProps> = ({
   isOpen,
   onClose,
   onSuccess,
-  purchaseToEdit
+  purchaseToEdit,
+  initialScannedData,
+  onOpenScanner
 }) => {
   const { currentSiteId, showToast, triggerRefresh } = useAppStore();
 
@@ -64,6 +69,7 @@ export const PurchaseFormModal: React.FC<PurchaseFormModalProps> = ({
   const [notes, setNotes] = useState(purchaseToEdit?.notes || '');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
+  const [isAutoFilledByAi, setIsAutoFilledByAi] = useState(false);
 
   // Quick New Supplier inline
   const [newSupplierName, setNewSupplierName] = useState('');
@@ -88,7 +94,7 @@ export const PurchaseFormModal: React.FC<PurchaseFormModalProps> = ({
     if (isOpen && currentSiteId) {
       initForm();
     }
-  }, [isOpen, currentSiteId, purchaseToEdit]);
+  }, [isOpen, currentSiteId, purchaseToEdit, initialScannedData]);
 
   const initForm = async () => {
     if (!currentSiteId) return;
@@ -105,6 +111,7 @@ export const PurchaseFormModal: React.FC<PurchaseFormModalProps> = ({
     setMaterials(matList);
 
     if (purchaseToEdit) {
+      setIsAutoFilledByAi(false);
       setSupplierId(purchaseToEdit.supplierId);
       setInvoiceNumber(purchaseToEdit.invoiceNumber || '');
       setDate(purchaseToEdit.date);
@@ -154,7 +161,106 @@ export const PurchaseFormModal: React.FC<PurchaseFormModalProps> = ({
           totalAmount: defaultR
         }]);
       }
+    } else if (initialScannedData) {
+      // Auto-fill from AI Scanned Bill!
+      setIsAutoFilledByAi(true);
+
+      // 1. Supplier matching or auto-creation
+      let matchedSuppId = '';
+      if (initialScannedData.supplierName) {
+        const target = initialScannedData.supplierName.trim().toLowerCase();
+        const found = suppList.find(s => {
+          const cur = s.name.toLowerCase();
+          return cur === target || cur.includes(target) || target.includes(cur);
+        });
+
+        if (found) {
+          matchedSuppId = found.id;
+        } else {
+          // Auto-create new supplier account
+          const newSupp: Account = {
+            id: 'acc_' + Date.now(),
+            siteId: currentSiteId,
+            type: 'supplier',
+            name: initialScannedData.supplierName.trim(),
+            phone: initialScannedData.supplierPhone,
+            openingBalance: 0,
+            status: 'active',
+            createdAt: Date.now(),
+            updatedAt: Date.now()
+          };
+          await db.accounts.add(newSupp);
+          suppList.push(newSupp);
+          setSuppliers([...suppList]);
+          matchedSuppId = newSupp.id;
+        }
+      }
+      setSupplierId(matchedSuppId || (suppList[0]?.id || ''));
+
+      // 2. Invoice metadata
+      setInvoiceNumber(initialScannedData.invoiceNo || '');
+      setDate(initialScannedData.date || new Date().toISOString().split('T')[0]);
+      setPaidAmount(initialScannedData.paidAmount || 0);
+      setPaymentMode(initialScannedData.paymentMode || 'cash');
+      setNotes(initialScannedData.notes || 'Auto-scanned via AI Bill Scanner');
+
+      // 3. Line Items & Materials
+      if (initialScannedData.items && initialScannedData.items.length > 0) {
+        const parsedItems: FormLineItem[] = [];
+        for (const it of initialScannedData.items) {
+          const category = PREDEFINED_CATEGORIES.includes(it.category) ? it.category : 'Cement';
+
+          // Match material in current site
+          let matchedMat = matList.find(
+            m => m.name.toLowerCase() === it.materialName.toLowerCase() ||
+                 (m.category === category && m.name.toLowerCase().includes(it.materialName.toLowerCase()))
+          );
+
+          if (!matchedMat) {
+            // Auto-create material on the fly
+            const newMat: Material = {
+              id: 'mat_' + Date.now() + '_' + Math.random().toString(36).substring(2, 6),
+              siteId: currentSiteId,
+              category,
+              name: it.materialName.trim(),
+              unit: it.unit || CATEGORY_DEFAULT_UNITS[category] || 'pcs',
+              minimumStock: 0,
+              defaultRate: it.rate || 0,
+              status: 'active',
+              createdAt: Date.now(),
+              updatedAt: Date.now()
+            };
+            await db.materials.add(newMat);
+            matList.push(newMat);
+            matchedMat = newMat;
+          }
+
+          const qty = it.quantity || 1;
+          const r = it.rate || 0;
+          parsedItems.push({
+            category,
+            materialId: matchedMat.id,
+            quantity: qty,
+            rate: r,
+            discount: 0,
+            tax: 0,
+            totalAmount: it.amount || Math.round(qty * r * 100) / 100
+          });
+        }
+        setMaterials([...matList]);
+        setItems(parsedItems);
+
+        const uniqueCats = Array.from(new Set(parsedItems.map(i => i.category)));
+        if (uniqueCats.length === 1) {
+          setBillCategory(uniqueCats[0]);
+        } else {
+          setBillCategory('all');
+        }
+      }
+
+      showToast('Bill data auto-filled by AI! Please review.', 'success');
     } else {
+      setIsAutoFilledByAi(false);
       if (suppList.length > 0) {
         setSupplierId(suppList[0].id);
       } else {
@@ -466,17 +572,50 @@ export const PurchaseFormModal: React.FC<PurchaseFormModalProps> = ({
               </p>
             </div>
           </div>
-          <button
-            onClick={onClose}
-            className="p-2 text-charcoal-400 hover:text-white hover:bg-charcoal-800 rounded-xl transition"
-            title="Close"
-          >
-            <X className="w-5 h-5" />
-          </button>
+
+          <div className="flex items-center gap-2">
+            {onOpenScanner && !purchaseToEdit && (
+              <button
+                type="button"
+                onClick={onOpenScanner}
+                className="bg-purple-950/80 hover:bg-purple-900 border border-purple-700/70 text-purple-300 font-extrabold px-3 py-1.5 rounded-xl text-xs flex items-center gap-1.5 transition active:scale-95 shadow-sm shadow-purple-950"
+                title="Scan bill photo with AI"
+              >
+                <Camera className="w-3.5 h-3.5 text-purple-300" />
+                <span>📸 Scan Bill (AI)</span>
+              </button>
+            )}
+
+            <button
+              onClick={onClose}
+              className="p-2 text-charcoal-400 hover:text-white hover:bg-charcoal-800 rounded-xl transition"
+              title="Close"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
         </div>
 
         <form onSubmit={handleSubmit} className="flex-1 flex flex-col min-h-0 overflow-hidden">
           <div className="p-3.5 sm:p-6 space-y-4 sm:space-y-5 overflow-y-auto custom-scrollbar flex-1 overscroll-contain">
+          {isAutoFilledByAi && (
+            <div className="p-3 bg-purple-950/70 border border-purple-700/80 rounded-2xl flex items-center justify-between text-xs text-purple-200 animate-in fade-in">
+              <div className="flex items-center gap-2">
+                <Sparkles className="w-4 h-4 text-purple-400 shrink-0" />
+                <span>
+                  <strong>AI Auto-Filled:</strong> पर्चे से सप्लायर, तारीख और सभी आइटम्स भर दिए गए हैं। कृपया एक बार देखकर सेव करें।
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsAutoFilledByAi(false)}
+                className="text-purple-400 hover:text-white text-xs font-bold p-1 rounded"
+              >
+                ✕
+              </button>
+            </div>
+          )}
+
           {error && (
             <div className="p-3.5 bg-red-950/60 border border-red-800 text-red-300 rounded-2xl text-xs flex items-center gap-2">
               <AlertCircle className="w-4 h-4 shrink-0" />
