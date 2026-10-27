@@ -53,87 +53,87 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
   const features = [
     {
       icon: Camera,
-      title: 'AI फोटो बिल व पर्चा स्कैनर',
+      title: 'AI Photo Bill & Invoice Scanner',
       tagline: 'Gemini 1.5 Flash Vision OCR',
-      desc: 'कच्चे पर्चे या GST बिल की बस फोटो खींचो — सप्लायर, तारीख, आइटम, रेट और कुल अमाउंट AI अपने-आप भर देता है। 2 सेकंड में एंट्री!',
-      highlight: 'AI Vision Powered'
+      desc: 'Snap a quick photo of handwritten slips, challans, or printed GST bills. AI auto-extracts supplier name, date, line items, rates, and totals in 2 seconds.',
+      highlight: 'Vision AI Powered'
     },
     {
       icon: Building2,
-      title: 'साइट-वाइज़ प्रोजेक्ट मैनेजमेंट',
-      tagline: 'Strict Site Isolation',
-      desc: 'विकास नगर, सेक्टर 35, मॉडल टाउन — हर प्रोजेक्ट का अलग मटीरियल, अलग लेबर और अलग खर्च। कोई भी डेटा कभी मिक्स नहीं होगा।',
+      title: 'Site-First Project Isolation',
+      tagline: 'Strict Multi-Site Accounting',
+      desc: 'Vikas Nagar, Sector 35, Model Town — each project maintains its own isolated accounts, inventory, and expenses. Zero data cross-contamination.',
       highlight: 'Project First'
     },
     {
       icon: Boxes,
-      title: 'मटीरियल इन्वेंट्री व लाइव स्टॉक',
+      title: 'Material Inventory & Live Stock',
       tagline: 'Cement, Steel, Bricks, Sanitary',
-      desc: 'साइट पर कितना माल आया, कितना इस्तेमाल हुआ और आज गोदाम में कितना स्टॉक बाकी है। मटीरियल की चोरी और वेस्टेज बंद!',
+      desc: 'Track purchases (In), daily usage (Out), and current warehouse balances in real time. Eliminate material theft and unexplained site wastage.',
       highlight: 'Real-Time Stock'
     },
     {
       icon: Users,
-      title: 'सप्लायर और लेबर लेजर',
-      tagline: 'Party Ledger & Due Tracking',
-      desc: 'सप्लायर्स की डिलीवरी, दी गई पेमेंट (UPI/Cash/Cheque) और बाकी बकाया। लेबर हाजिरी और एडवांस का 100% पारदर्शी हिसाब।',
-      highlight: 'No Accounting Hassle'
+      title: 'Supplier & Labour Ledgers',
+      tagline: 'Party Balances & Due Tracking',
+      desc: 'Maintain transparent accounts for all material suppliers and labor contractors. Track delivery invoices, cash/UPI payments, and net outstanding dues.',
+      highlight: 'Zero Accounting Hassle'
     },
     {
       icon: WifiOff,
-      title: '100% प्योर ऑफलाइन आर्किटेक्चर',
-      tagline: 'Works Anywhere Without Internet',
-      desc: 'बेसमेंट, रिमोट विलेज या बिना नेटवर्क वाली साइट पर भी बेधड़क चलेगा। इंटरनेट आने पर ऑटोमैटिक बैकग्राउंड सिंक।',
+      title: '100% Pure Offline Architecture',
+      tagline: 'Runs Anywhere Without Internet',
+      desc: 'Engineered with local-first IndexedDB storage. Works continuously inside basements and remote job sites with automatic cloud sync when reconnected.',
       highlight: 'Local-First'
     },
     {
       icon: Mic,
-      title: 'हिंदी व हिंग्लिश वॉइस AI एंट्री',
-      tagline: 'Voice-to-Accounting',
-      desc: 'बोलकर एंट्री दर्ज करें: "शर्मा हार्डवेयर से 50 बोरी सीमेंट 18000 की आई"। AI समझकर सही खाते में पोस्ट कर देता है।',
+      title: 'Voice-to-Accounting Assistant',
+      tagline: 'Hands-Free Entry in English & Hindi',
+      desc: 'Speak transactions naturally: "Received 50 bags of cement for 18000 from Sharma Hardware". AI parses the record and files it in seconds.',
       highlight: 'Hands-Free'
     },
     {
       icon: FileText,
-      title: '1-क्लिक WhatsApp PDF रिपोर्ट्स',
-      tagline: 'Professional Statements',
-      desc: 'प्रोजेक्ट कॉस्टिंग, मटीरियल परचेस और पार्टी लेजर की सुंदर PDF स्टेटमेंट्स। एक क्लिक में डाउनलोड करें या क्लाइंट को भेजें।',
+      title: '1-Click WhatsApp PDF Statements',
+      tagline: 'Client & Supplier Reports',
+      desc: 'Export beautifully formatted project cost summaries, material purchases, and party ledger statements. Ready to download or share via WhatsApp.',
       highlight: 'Instant Share'
     },
     {
       icon: Smartphone,
-      title: 'मोबाइल और डेस्कटॉप लाइव सिंक',
+      title: 'Real-Time Mobile & Desktop Sync',
       tagline: 'Multi-Device Cloud Sync',
-      desc: 'सुपरवाइजर साइट से मोबाइल पर एंट्री करे, ठेकेदार और ओनर ऑफिस में डेस्कटॉप पर तुरंत लाइव प्रोग्रेस व खर्च देखें।',
+      desc: 'Site supervisors log entries from smartphones in the field; contractors and project owners view live updates from desktops in the office.',
       highlight: 'Multi-Device'
     }
   ];
 
   const targetAudience = [
     {
-      title: 'सिविल ठेकेदार व बिल्डर्स',
-      role: 'Civil Contractors & Builders',
-      desc: 'एक साथ कई साइट्स, बड़े मटीरियल ऑर्डर और लेबर टीमों का सटीक फाइनेंशियल कंट्रोल।'
+      title: 'Civil Contractors & Builders',
+      role: 'General & Commercial Contractors',
+      desc: 'Manage multiple concurrent construction sites, procurement logistics, and subcontractor teams with complete financial control.'
     },
     {
-      title: 'सब-कॉन्ट्रैक्टर्स व मिस्त्री',
-      role: 'Sub-Contractors (Plumbing, Tile, Electrical)',
-      desc: 'ठेके पर काम करने वाले विशेषज्ञ — मटीरियल इनवॉइस और पेमेंट बकाये का पक्का हिसाब।'
+      title: 'Specialized Sub-Contractors',
+      role: 'Plumbing, Electrical, Tile, Painting',
+      desc: 'Trade specialists tracking material bills, progress invoicing, and outstanding receivables across active project contracts.'
     },
     {
-      title: 'साइट सुपरवाइजर्स व इंजीनियर्स',
-      role: 'Site Supervisors & Engineers',
-      desc: 'रोजाना साइट पर आने वाले मटीरियल की रसीदें और स्टॉक का तुरंत मोबाइल से रिकॉर्ड।'
+      title: 'Site Supervisors & Engineers',
+      role: 'Job-Site Project Managers',
+      desc: 'Log incoming material deliveries on site instantly from mobile, monitor warehouse stock balances, and track daily labor.'
     },
     {
-      title: 'हार्डवेयर व मटीरियल सप्लायर्स',
-      role: 'Material Suppliers & Vendors',
-      desc: 'अलग-अलग साइट्स पर माल की सप्लाई और पेमेंट रिकवरी का पारदर्शी लेजर।'
+      title: 'Hardware & Material Suppliers',
+      role: 'Building Material Vendors & Dealers',
+      desc: 'Monitor supplies delivered across different client construction sites with transparent, real-time ledger accounting.'
     },
     {
-      title: 'मकान मालिक (Home Builders)',
-      role: 'Individual Home Owners',
-      desc: 'अपना घर बनवा रहे लोग, जिन्हें सीमेंट, सरिया और लेबर के हर रुपये का सटीक हिसाब चाहिए।'
+      title: 'Individual Home Owners',
+      role: 'Self-Builders & Property Owners',
+      desc: 'Homeowners building their dream property who demand complete transparency over every rupee spent on cement, steel, and labor.'
     }
   ];
 
@@ -143,7 +143,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
       <header className="sticky top-0 z-40 bg-charcoal-950/90 backdrop-blur-md border-b border-charcoal-800/80 px-4 sm:px-8 py-3.5 flex items-center justify-between">
         <div className="flex items-center space-x-3">
           <div className="w-10 h-10 rounded-xl bg-charcoal-900 border border-construction-500/40 p-1.5 flex items-center justify-center shadow">
-            <img src="/logo.svg" alt="Khata AI" className="w-7 h-7" />
+            <img src="/logo.svg" alt="Construction Khata AI" className="w-7 h-7" />
           </div>
           <div>
             <div className="text-sm font-black tracking-wide text-white flex items-center gap-1.5">
@@ -161,13 +161,13 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
         {/* Navigation links */}
         <nav className="hidden md:flex items-center space-x-6 text-xs font-bold text-charcoal-300">
           <button onClick={() => scrollToSection('features')} className="hover:text-white transition">
-            Features (सुविधाएँ)
+            Features
           </button>
           <button onClick={() => scrollToSection('who-it-is-for')} className="hover:text-white transition">
-            Who It's For (किसके लिए)
+            Who It's For
           </button>
           <button onClick={() => scrollToSection('pricing')} className="hover:text-white transition">
-            Offer (लॉन्च ऑफर)
+            Launch Offer
           </button>
         </nav>
 
@@ -184,7 +184,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
             onClick={handleOpenAuth}
             className="bg-gradient-to-r from-construction-500 to-amber-500 hover:from-construction-400 hover:to-amber-400 text-charcoal-950 font-black px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl text-xs sm:text-sm transition shadow-lg shadow-construction-500/10 active:scale-95 flex items-center gap-2"
           >
-            <span>Sign In / लॉगिन</span>
+            <span>Sign In</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </button>
         </div>
@@ -197,19 +197,18 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
 
         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-charcoal-900 border border-construction-500/30 text-xs font-bold text-construction-300 mb-6 shadow-sm">
           <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-          <span>भारत का पहला AI-पावर्ड Construction Site Khata &amp; Inventory</span>
+          <span>India's Premier AI Construction Khata &amp; Material Inventory</span>
         </div>
 
         <h1 className="text-3xl sm:text-5xl md:text-6xl font-black text-white tracking-tight leading-[1.15] max-w-4xl mx-auto">
-          कंस्ट्रक्शन साइट का हिसाब,{' '}
+          Construction Site Accounting,{' '}
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-construction-400 via-amber-300 to-construction-500">
-            अब AI से 10 गुना आसान
+            Supercharged with Vision AI
           </span>
         </h1>
 
         <p className="mt-5 text-sm sm:text-base md:text-lg text-charcoal-300 max-w-2xl mx-auto leading-relaxed">
-          सिविल ठेकेदारों और बिल्डर्स के लिए तैयार किया गया संपूर्ण समाधान — मोबाइल से पर्चा फोटो खींचो, AI बिल खुद भरेगा। 
-          सीमेंट, सरिया, लेबर हाजिरी और पार्टी लेजर का 100% सटीक हिसाब, <strong>बिना इंटरनेट भी एक्टिव!</strong>
+          Engineered specifically for civil contractors, builders, and site supervisors. Snap photo bills to auto-fill invoices, track real-time cement &amp; steel stock, and manage labor accounts — <strong>100% functional even without internet!</strong>
         </p>
 
         {/* Hero CTA Buttons */}
@@ -225,14 +224,14 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
               <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" />
               <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" />
             </svg>
-            <span>Google से लॉगिन करें (फ्री)</span>
+            <span>Sign in with Google (Free)</span>
           </button>
 
           <button
             onClick={onEnterApp}
             className="w-full sm:w-auto bg-charcoal-900 hover:bg-charcoal-850 text-slate-200 border border-charcoal-700 font-bold px-6 py-3.5 rounded-2xl text-sm transition shadow-lg active:scale-95 flex items-center justify-center gap-2"
           >
-            <span>डैशबोर्ड खोलें</span>
+            <span>Explore Dashboard</span>
             <ArrowRight className="w-4 h-4 text-construction-400" />
           </button>
         </div>
@@ -241,19 +240,19 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
         <div className="mt-10 flex flex-wrap items-center justify-center gap-4 sm:gap-8 text-xs text-charcoal-400 font-semibold">
           <div className="flex items-center gap-1.5">
             <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-            <span>1 साइट 4 महीने बिल्कुल फ्री</span>
+            <span>1 Site Free for 4 Months</span>
           </div>
           <div className="flex items-center gap-1.5">
             <CheckCircle2 className="w-4 h-4 text-construction-400" />
-            <span>100% प्योर ऑफलाइन-रेडी</span>
+            <span>100% Pure Offline-First Ready</span>
           </div>
           <div className="flex items-center gap-1.5">
             <CheckCircle2 className="w-4 h-4 text-blue-400" />
-            <span>Gemini Vision AI स्कैनर</span>
+            <span>Gemini Vision AI Scanner</span>
           </div>
           <div className="flex items-center gap-1.5">
             <CheckCircle2 className="w-4 h-4 text-purple-400" />
-            <span>कोई क्रेडिट कार्ड जरूरी नहीं</span>
+            <span>No Credit Card Required</span>
           </div>
         </div>
 
@@ -279,27 +278,27 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
           {/* Quick metric cards */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mt-6">
             <div className="bg-charcoal-950/80 border border-charcoal-800 rounded-2xl p-3.5">
-              <div className="text-[11px] text-charcoal-400 font-medium">कुल प्रोजेक्ट खर्च</div>
+              <div className="text-[11px] text-charcoal-400 font-medium">Total Project Cost</div>
               <div className="text-base sm:text-xl font-black text-white mt-1">₹14,85,400</div>
-              <div className="text-[10px] text-emerald-400 font-bold mt-1">बजट नियंत्रण में</div>
+              <div className="text-[10px] text-emerald-400 font-bold mt-1">Within Budget</div>
             </div>
 
             <div className="bg-charcoal-950/80 border border-charcoal-800 rounded-2xl p-3.5">
-              <div className="text-[11px] text-charcoal-400 font-medium">सीमेंट स्टॉक (Cement)</div>
-              <div className="text-base sm:text-xl font-black text-amber-400 mt-1">140 बोरी</div>
-              <div className="text-[10px] text-charcoal-400 mt-1">350 इस्तेमाल हुई</div>
+              <div className="text-[11px] text-charcoal-400 font-medium">Cement Stock</div>
+              <div className="text-base sm:text-xl font-black text-amber-400 mt-1">140 Bags</div>
+              <div className="text-[10px] text-charcoal-400 mt-1">350 Used on Site</div>
             </div>
 
             <div className="bg-charcoal-950/80 border border-charcoal-800 rounded-2xl p-3.5">
-              <div className="text-[11px] text-charcoal-400 font-medium">सरिया स्टॉक (Steel)</div>
-              <div className="text-base sm:text-xl font-black text-blue-400 mt-1">2.4 टन</div>
+              <div className="text-[11px] text-charcoal-400 font-medium">Steel Stock</div>
+              <div className="text-base sm:text-xl font-black text-blue-400 mt-1">2.4 Tons</div>
               <div className="text-[10px] text-charcoal-400 mt-1">Tata Tiscon TMT</div>
             </div>
 
             <div className="bg-charcoal-950/80 border border-charcoal-800 rounded-2xl p-3.5">
-              <div className="text-[11px] text-charcoal-400 font-medium">सप्लायर बकाया (Due)</div>
+              <div className="text-[11px] text-charcoal-400 font-medium">Supplier Due</div>
               <div className="text-base sm:text-xl font-black text-red-400 mt-1">₹42,000</div>
-              <div className="text-[10px] text-charcoal-400 mt-1">शर्मा हार्डवेयर</div>
+              <div className="text-[10px] text-charcoal-400 mt-1">Sharma Hardware</div>
             </div>
           </div>
         </div>
@@ -310,37 +309,37 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-10">
             <h2 className="text-2xl sm:text-3xl font-black text-white">
-              डायरी और रफ कॉपियों की सिरदर्दी को हमेशा के लिए अलविदा कहें
+              Say Goodbye to Lost Paper Receipts &amp; Messy Site Notebooks
             </h2>
             <p className="text-xs sm:text-sm text-charcoal-400 mt-2">
-              Construction Khata AI आपके कंस्ट्रक्शन बिजनेस को आधुनिक और पारदर्शी बनाता है।
+              Construction Khata AI modernizes and automates your job-site financial records.
             </p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-6">
             <div className="bg-red-950/20 border border-red-900/40 rounded-3xl p-6 space-y-3">
               <div className="text-red-400 font-black text-sm uppercase tracking-wider flex items-center gap-2">
-                <span>❌ पुराना तरीका (डायरी व रफ पर्चे)</span>
+                <span>❌ The Traditional Pain (Paper Notebooks &amp; Lost Receipts)</span>
               </div>
               <ul className="space-y-2.5 text-xs sm:text-sm text-charcoal-300">
-                <li>• हार्डवेयर दुकान के पर्चे जेब में मुड़ जाते हैं या खो जाते हैं।</li>
-                <li>• साइट पर सीमेंट और सरिया कब आया और कहाँ लगा, कोई हिसाब नहीं।</li>
-                <li>• महीने के अंत में सप्लायर के बकाये को लेकर तू-तू मैं-मैं।</li>
-                <li>• लेबर हाजिरी और एडवांस का कोई पक्का रिकॉर्ड नहीं।</li>
-                <li>• बेसमेंट या रिमोट साइट्स पर इंटरनेट न होने से काम रुकना।</li>
+                <li>• Delivery slips and bills get crumpled or lost in pockets on the job site.</li>
+                <li>• No reliable record of when cement and steel arrived or where they were used.</li>
+                <li>• Stressful disputes with suppliers at month-end over conflicting bill totals.</li>
+                <li>• Labor daily attendance and advance wage payments tracked on loose paper.</li>
+                <li>• Cloud apps completely freeze in basements and zero-network job sites.</li>
               </ul>
             </div>
 
             <div className="bg-emerald-950/20 border border-emerald-900/40 rounded-3xl p-6 space-y-3">
               <div className="text-emerald-400 font-black text-sm uppercase tracking-wider flex items-center gap-2">
-                <span>✅ नया तरीका (Construction Khata AI)</span>
+                <span>✅ The Modern Solution (Construction Khata AI)</span>
               </div>
               <ul className="space-y-2.5 text-xs sm:text-sm text-charcoal-300">
-                <li>• पर्चे की फोटो खींचो, AI 2 सेकंड में खुद एंट्री बना देता है।</li>
-                <li>• मटीरियल इन, आउट और लाइव स्टॉक एक-एक बोरी तक ट्रैक।</li>
-                <li>• सप्लायर का 1-क्लिक लेजर और WhatsApp PDF स्टेटमेंट।</li>
-                <li>• लेबर वर्क और एडवांस का तुरंत हिसाब।</li>
-                <li>• 100% प्योर ऑफलाइन मोड — बिना इंटरनेट भी सब कुछ चलेगा।</li>
+                <li>• Snap a photo — Gemini Vision AI extracts supplier, date, items, rate &amp; totals.</li>
+                <li>• Track material In, Out, and live warehouse balance down to the last bag.</li>
+                <li>• 1-click supplier ledger with transparent payments and WhatsApp PDF exports.</li>
+                <li>• Accurate labor wage logs, attendance, and advance payment records.</li>
+                <li>• 100% Pure Offline Architecture — zero downtime on zero-network job sites.</li>
               </ul>
             </div>
           </div>
@@ -351,13 +350,13 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
       <section id="features" className="py-16 sm:py-24 px-4 sm:px-8 max-w-6xl mx-auto w-full">
         <div className="text-center max-w-2xl mx-auto mb-14">
           <div className="text-xs font-black uppercase tracking-wider text-construction-400 mb-2">
-            Powerful Features
+            Powerful Capabilities
           </div>
           <h2 className="text-2xl sm:text-4xl font-black text-white">
-            कंस्ट्रक्शन साइट संभालने के लिए आवश्यक हर एक फीचर
+            Everything Required to Manage a Construction Job Site
           </h2>
           <p className="text-xs sm:text-sm text-charcoal-400 mt-2">
-            बिना किसी जटिल अकाउंटिंग ज्ञान के, कोई भी ठेकेदार या सुपरवाइजर इसे 5 मिनट में सीख सकता है।
+            No complex accounting jargon. Any contractor or site engineer can master it in 5 minutes.
           </p>
         </div>
 
@@ -397,10 +396,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
               Target Audience
             </div>
             <h2 className="text-2xl sm:text-4xl font-black text-white">
-              यह किसके लिए सबसे उपयोगी है?
+              Who Is Construction Khata AI Built For?
             </h2>
             <p className="text-xs sm:text-sm text-charcoal-400 mt-2">
-              चाहे आप एक साइट संभाल रहे हों या 20 साइट्स — यह सॉफ्टवेयर हर स्केल पर फिट बैठता है।
+              Whether you oversee 1 custom villa or manage 20 commercial projects across the city.
             </p>
           </div>
 
@@ -427,10 +426,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
         </div>
 
         <h2 className="text-3xl sm:text-5xl font-black text-white">
-          1 साइट पूरे 4 महीने बिल्कुल फ्री
+          1 Project Site Free for 4 Months
         </h2>
         <p className="mt-3 text-xs sm:text-sm text-charcoal-400 max-w-lg mx-auto">
-          बिना किसी क्रेडिट कार्ड के आज ही शुरू करें। सभी AI फीचर्स, मटीरियल इन्वेंट्री और ऑफलाइन मोड शामिल हैं।
+          Start instantly without entering any credit card details. Includes all AI features, inventory tracking, and offline sync.
         </p>
 
         <div className="mt-10 grid md:grid-cols-2 gap-6 text-left max-w-2xl mx-auto">
@@ -444,29 +443,29 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
               <div className="text-3xl font-black text-white mt-2">
                 ₹0 <span className="text-xs text-charcoal-400 font-normal">/ 120 Days (4 Months)</span>
               </div>
-              <p className="text-xs text-charcoal-400 mt-1">1 एक्टिव साइट के लिए संपूर्ण फीचर्स</p>
+              <p className="text-xs text-charcoal-400 mt-1">Full features for 1 active construction project</p>
             </div>
 
             <ul className="space-y-2 text-xs text-charcoal-300">
               <li className="flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                <span>1 एक्टिव कंस्ट्रक्शन साइट</span>
+                <span>1 Active Construction Project Site</span>
               </li>
               <li className="flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                <span>AI फोटो बिल स्कैनर (Gemini Vision)</span>
+                <span>AI Photo Bill Scanner (Gemini Vision)</span>
               </li>
               <li className="flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                <span>सीमेंट, सरिया व मटीरियल इन्वेंट्री</span>
+                <span>Cement, Steel &amp; Material Inventory</span>
               </li>
               <li className="flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                <span>100% प्योर ऑफलाइन एक्सेस</span>
+                <span>100% Pure Offline Access</span>
               </li>
               <li className="flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                <span>WhatsApp PDF रिपोर्ट्स व स्टेटमेंट्स</span>
+                <span>WhatsApp PDF Reports &amp; Statements</span>
               </li>
             </ul>
 
@@ -485,25 +484,25 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
               <div className="text-3xl font-black text-white mt-2">
                 ₹499 <span className="text-xs text-charcoal-400 font-normal">/ month</span>
               </div>
-              <p className="text-xs text-charcoal-400 mt-1">अनलिमिटेड साइट्स व बड़े बिल्डर्स के लिए</p>
+              <p className="text-xs text-charcoal-400 mt-1">For growing contractors &amp; large builders</p>
             </div>
 
             <ul className="space-y-2 text-xs text-charcoal-300">
               <li className="flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-amber-400 shrink-0" />
-                <span><strong>अनलिमिटेड साइट्स</strong> (Unlimited Projects)</span>
+                <span><strong>Unlimited Sites</strong> (Active Projects)</span>
               </li>
               <li className="flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-amber-400 shrink-0" />
-                <span>मल्टी-डिवाइस ऑटो क्लाउड सिंक</span>
+                <span>Multi-Device Real-Time Cloud Sync</span>
               </li>
               <li className="flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-amber-400 shrink-0" />
-                <span>अनलिमिटेड AI बिल स्कैनिंग</span>
+                <span>Unlimited AI Bill Scanning</span>
               </li>
               <li className="flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-amber-400 shrink-0" />
-                <span>Priority WhatsApp सपोर्ट</span>
+                <span>Priority WhatsApp Support</span>
               </li>
             </ul>
 
@@ -521,7 +520,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
       <footer className="mt-auto border-t border-charcoal-800 bg-charcoal-950 py-10 px-4 sm:px-8 text-center text-xs text-charcoal-400 space-y-4">
         <div className="flex items-center justify-center space-x-2">
           <div className="w-6 h-6 rounded-lg bg-charcoal-900 border border-construction-500/40 p-1 flex items-center justify-center">
-            <img src="/logo.svg" alt="Khata AI" className="w-4 h-4" />
+            <img src="/logo.svg" alt="Construction Khata AI" className="w-4 h-4" />
           </div>
           <span className="font-extrabold text-white text-sm">Construction Khata AI</span>
           <span className="text-charcoal-600">•</span>
