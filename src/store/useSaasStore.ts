@@ -80,7 +80,7 @@ export const useSaasStore = create<SaasState>((set, get) => ({
         console.warn('Initial site sync error:', e);
       }
     } else {
-      set({ currentUser: null, currentTenant: null, isAuthModalOpen: true });
+      set({ currentUser: null, currentTenant: null, isAuthModalOpen: false });
     }
   },
 

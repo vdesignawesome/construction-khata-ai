@@ -178,12 +178,18 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
           </div>
 
           {/* OmniCraft Ecosystem Footer */}
-          <div className="pt-2 border-t border-charcoal-800/60 text-center">
-            <div className="text-[10px] text-charcoal-400 font-semibold tracking-wider flex items-center justify-center gap-1">
+          <div className="pt-2 border-t border-charcoal-800/60 text-center space-y-1">
+            <a
+              href="/?landing=true"
+              className="text-[10px] text-charcoal-400 hover:text-construction-400 transition font-medium block underline-offset-2 hover:underline"
+            >
+              🌐 View Public Landing Page
+            </a>
+            <div className="text-[10px] text-charcoal-500 font-semibold tracking-wider flex items-center justify-center gap-1">
               <span>Powered by</span>
               <span className="text-amber-400 font-black">{BRAND_CONFIG.parentBrand}</span>
-              <span className="text-charcoal-500">•</span>
-              <span className="text-charcoal-400">Ecosystem</span>
+              <span className="text-charcoal-600">•</span>
+              <span className="text-charcoal-500">Ecosystem</span>
             </div>
           </div>
         </div>

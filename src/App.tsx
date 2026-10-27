@@ -15,6 +15,7 @@ import { PwaInstallPrompt } from './components/pwa/PwaInstallPrompt';
 import { AuthModal } from './components/saas/AuthModal';
 import { PaywallModal } from './components/saas/PaywallModal';
 import { SuperAdminPage } from './components/saas/SuperAdminPage';
+import { LandingPage } from './components/landing/LandingPage';
 import { useSaasStore } from './store/useSaasStore';
 
 // Views
@@ -48,7 +49,14 @@ export const App: React.FC = () => {
       window.location.hash.includes('admin')
     );
   });
-  const { initSaasSession } = useSaasStore();
+  const { currentUser, initSaasSession } = useSaasStore();
+  const [showLanding, setShowLanding] = useState<boolean>(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.has('landing') || window.location.hash.includes('landing')) return true;
+    if (params.has('app') || window.location.hash.includes('app')) return false;
+    const session = localStorage.getItem('construction_khata_saas_session');
+    return !session;
+  });
 
   useEffect(() => {
     const handleUrlChange = () => {
@@ -57,6 +65,12 @@ export const App: React.FC = () => {
         window.location.pathname.startsWith('/admin') ||
         window.location.hash.includes('admin')
       );
+      const params = new URLSearchParams(window.location.search);
+      if (params.has('landing') || window.location.hash.includes('landing')) {
+        setShowLanding(true);
+      } else if (params.has('app') || window.location.hash.includes('app')) {
+        setShowLanding(false);
+      }
     };
 
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -97,6 +111,20 @@ export const App: React.FC = () => {
           setIsAdminView(false);
         }}
       />
+    );
+  }
+
+  if (showLanding && (!currentUser || window.location.search.includes('landing'))) {
+    return (
+      <>
+        <LandingPage
+          onEnterApp={() => {
+            window.history.pushState({}, '', '/');
+            setShowLanding(false);
+          }}
+        />
+        <AuthModal />
+      </>
     );
   }
 
