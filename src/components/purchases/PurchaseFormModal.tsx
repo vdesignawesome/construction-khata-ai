@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Plus, Trash2, ShoppingBag, AlertCircle, Camera, Sparkles } from 'lucide-react';
+import { X, Plus, Trash2, ShoppingBag, AlertCircle, Camera, Sparkles, Building2 } from 'lucide-react';
 import { db, PREDEFINED_CATEGORIES, STANDARD_UNITS } from '../../db';
 import { useAppStore } from '../../store/useAppStore';
 import { createPurchase, updatePurchase } from '../../engine/accounting';
@@ -640,17 +640,27 @@ export const PurchaseFormModal: React.FC<PurchaseFormModalProps> = ({
 
               {showAddSupplier ? (
                 <div className="flex gap-1.5">
-                  <input
-                    type="text"
-                    placeholder="New Supplier Name"
-                    value={newSupplierName}
-                    onChange={(e) => setNewSupplierName(e.target.value)}
-                    className="flex-1 bg-charcoal-800 border border-charcoal-700 rounded-xl px-3 py-2 text-xs text-white placeholder-charcoal-500 focus:outline-none focus:border-construction-500"
-                  />
+                  <div className="relative flex-1">
+                    <Building2 className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none text-construction-400" />
+                    <input
+                      type="text"
+                      placeholder="New Supplier Name"
+                      value={newSupplierName}
+                      onChange={(e) => setNewSupplierName(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault();
+                          handleCreateSupplier();
+                        }
+                      }}
+                      autoFocus
+                      className="w-full bg-charcoal-800 border border-charcoal-700 rounded-xl pl-8 pr-3 py-2 text-xs text-white placeholder-charcoal-500 focus:outline-none focus:border-construction-500"
+                    />
+                  </div>
                   <button
                     type="button"
                     onClick={handleCreateSupplier}
-                    className="bg-construction-500 hover:bg-construction-400 text-charcoal-950 px-3 rounded-xl text-xs font-black transition"
+                    className="bg-construction-500 hover:bg-construction-400 text-charcoal-950 px-3.5 rounded-xl text-xs font-black transition active:scale-95 shrink-0"
                   >
                     Add
                   </button>

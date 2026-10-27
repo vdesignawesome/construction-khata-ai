@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, CreditCard, AlertCircle } from 'lucide-react';
+import { X, CreditCard, AlertCircle, Building2, User } from 'lucide-react';
 import { db } from '../../db';
 import { useAppStore } from '../../store/useAppStore';
 import { createPayment } from '../../engine/accounting';
@@ -106,9 +106,6 @@ export const PaymentFormModal: React.FC<PaymentFormModalProps> = ({
       .where({ siteId: currentSiteId, status: 'active' })
       .toArray();
     setAccounts(list);
-    if (!paymentToEdit && !accountId && list.length > 0) {
-      setAccountId(list[0].id);
-    }
   };
 
   const filteredAccounts = accounts.filter(
@@ -256,24 +253,33 @@ export const PaymentFormModal: React.FC<PaymentFormModalProps> = ({
                     <option value="labour">Labour</option>
                   </select>
                 )}
-                <input
-                  type="text"
-                  placeholder={
-                    selectedType === 'labour' || newAccountType === 'labour'
-                      ? 'New Labour Name (e.g. Ramesh Mistry)'
-                      : 'New Supplier Name (e.g. Goyal Hardware)'
-                  }
-                  value={newAccountName}
-                  onChange={(e) => setNewAccountName(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
-                      e.preventDefault();
-                      handleCreateAccount();
+                <div className="relative flex-1">
+                  <div className="absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none text-construction-400">
+                    {selectedType === 'labour' || newAccountType === 'labour' ? (
+                      <User className="w-3.5 h-3.5" />
+                    ) : (
+                      <Building2 className="w-3.5 h-3.5" />
+                    )}
+                  </div>
+                  <input
+                    type="text"
+                    placeholder={
+                      selectedType === 'labour' || newAccountType === 'labour'
+                        ? 'New Labour Name (e.g. Ramesh Mistry)'
+                        : 'New Supplier Name (e.g. Goyal Hardware)'
                     }
-                  }}
-                  autoFocus
-                  className="flex-1 bg-charcoal-800 border border-charcoal-700 rounded-xl px-3 py-2 text-xs text-white placeholder-charcoal-500 focus:outline-none focus:border-construction-500"
-                />
+                    value={newAccountName}
+                    onChange={(e) => setNewAccountName(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault();
+                        handleCreateAccount();
+                      }
+                    }}
+                    autoFocus
+                    className="w-full bg-charcoal-800 border border-charcoal-700 rounded-xl pl-8 pr-3 py-2 text-xs text-white placeholder-charcoal-500 focus:outline-none focus:border-construction-500"
+                  />
+                </div>
                 <button
                   type="button"
                   onClick={handleCreateAccount}
@@ -289,7 +295,7 @@ export const PaymentFormModal: React.FC<PaymentFormModalProps> = ({
                 onChange={(e) => setAccountId(e.target.value)}
                 className="w-full bg-charcoal-800 border border-charcoal-700 rounded-xl p-2.5 text-xs text-white font-medium focus:outline-none focus:border-construction-500"
               >
-                <option value="">-- Select Recipient Account --</option>
+                <option value="">-- Select Recipient Account (खाता चुनें) --</option>
                 {filteredAccounts.map((a) => (
                   <option key={a.id} value={a.id}>
                     {a.name} ({a.type.toUpperCase()}) {a.phone ? `• ${a.phone}` : ''}
