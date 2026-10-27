@@ -115,7 +115,7 @@ export const useAppStore = create<AppState>((set, get) => ({
     const firstSite = await db.sites.orderBy('createdAt').first();
     if (firstSite) {
       localStorage.setItem('khata_current_site_id', firstSite.id);
-      set({ currentSiteId: firstSite.id, currentSite: firstSite });
+      set({ currentSiteId: firstSite.id, currentSite: firstSite, isSiteSelectorOpen: false });
     } else {
       localStorage.removeItem('khata_current_site_id');
       set({ currentSiteId: null, currentSite: null, isSiteSelectorOpen: true });

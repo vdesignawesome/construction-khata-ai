@@ -104,7 +104,8 @@ export const useSaasStore = create<SaasState>((set, get) => ({
       } catch (e) {
         console.warn('Login site sync error:', e);
       }
-      useAppStore.getState().setSiteSelectorOpen(true);
+      const activeSiteId = useAppStore.getState().currentSiteId;
+      useAppStore.getState().setSiteSelectorOpen(!activeSiteId);
     } finally {
       set({ isLoading: false });
     }
@@ -125,7 +126,8 @@ export const useSaasStore = create<SaasState>((set, get) => ({
       } catch (e) {
         console.warn('Google login site sync error:', e);
       }
-      useAppStore.getState().setSiteSelectorOpen(true);
+      const activeSiteId = useAppStore.getState().currentSiteId;
+      useAppStore.getState().setSiteSelectorOpen(!activeSiteId);
     } finally {
       set({ isLoading: false });
     }
@@ -146,7 +148,8 @@ export const useSaasStore = create<SaasState>((set, get) => ({
       } catch (e) {
         console.warn('Register site sync error:', e);
       }
-      useAppStore.getState().setSiteSelectorOpen(true);
+      const activeSiteId = useAppStore.getState().currentSiteId;
+      useAppStore.getState().setSiteSelectorOpen(!activeSiteId);
     } finally {
       set({ isLoading: false });
     }

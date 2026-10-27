@@ -534,16 +534,31 @@ export async function deleteTenantByAdmin(tenantId: string) {
 
 // ----------------- SITE CLOUD SYNC & MULTI-DEVICE SUPPORT -----------------
 
+export function sanitizeForFirestore<T extends Record<string, any>>(obj: T): T {
+  const clean: Record<string, any> = {};
+  for (const [key, value] of Object.entries(obj)) {
+    if (value !== undefined) {
+      if (value !== null && typeof value === 'object' && !Array.isArray(value)) {
+        clean[key] = sanitizeForFirestore(value);
+      } else {
+        clean[key] = value;
+      }
+    }
+  }
+  return clean as T;
+}
+
 export async function syncSiteToCloud(site: Site, tenantId: string): Promise<void> {
   const { db, isLive } = initFirebaseService();
   if (!isLive || !db || !tenantId) return;
 
   try {
     const siteRef = doc(db, 'tenants', tenantId, 'sites', site.id);
-    await setDoc(siteRef, {
+    const cleanSite = sanitizeForFirestore({
       ...site,
       updatedAt: site.updatedAt || Date.now()
-    }, { merge: true });
+    });
+    await setDoc(siteRef, cleanSite, { merge: true });
   } catch (e) {
     console.warn('Failed to sync site to Firestore:', e);
   }
@@ -599,7 +614,8 @@ export async function syncTenantSitesWithLocal(tenantId: string): Promise<Site[]
     for (const localSite of localSites) {
       const cloudSite = cloudMap.get(localSite.id);
       if (!cloudSite || (localSite.updatedAt || 0) > (cloudSite.updatedAt || 0)) {
-        await setDoc(doc(db, 'tenants', tenantId, 'sites', localSite.id), localSite, { merge: true });
+        const cleanSite = sanitizeForFirestore(localSite);
+        await setDoc(doc(db, 'tenants', tenantId, 'sites', localSite.id), cleanSite, { merge: true });
         cloudMap.set(localSite.id, localSite);
       }
     }
