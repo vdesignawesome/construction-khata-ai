@@ -16,7 +16,7 @@ export function getSavedAdSenseConfig(): AdSenseConfig {
 
   const metaEnv = (import.meta as any).env || {};
   return {
-    client: metaEnv.VITE_ADSENSE_CLIENT_ID || '',
+    client: metaEnv.VITE_ADSENSE_CLIENT_ID || 'ca-pub-6240364688256006',
     slotId: metaEnv.VITE_ADSENSE_SLOT_ID || '',
     isEnabled: true
   };
