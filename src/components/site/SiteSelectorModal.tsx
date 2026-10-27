@@ -153,6 +153,11 @@ export const SiteSelectorModal: React.FC = () => {
       }
 
       setSites(withFinancials);
+
+      // Auto-select first available site if none currently selected
+      if (!useAppStore.getState().currentSiteId && realSites.length > 0) {
+        await setCurrentSiteId(realSites[0].id);
+      }
     } catch (err) {
       console.error('Error loading sites:', err);
     } finally {
