@@ -18,7 +18,13 @@ import {
   Layers,
   Star,
   ChevronRight,
-  Receipt
+  Receipt,
+  AlertTriangle,
+  Zap,
+  XCircle,
+  Check,
+  FileX2,
+  FileCheck2
 } from 'lucide-react';
 import { BRAND_CONFIG } from '../../config/branding';
 import { useSaasStore } from '../../store/useSaasStore';
@@ -304,43 +310,212 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
         </div>
       </section>
 
-      {/* Problem vs Solution Section */}
-      <section className="py-14 bg-charcoal-900/50 border-y border-charcoal-800/80 px-4 sm:px-8">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-10">
-            <h2 className="text-2xl sm:text-3xl font-black text-white">
+      {/* Visual Graphical Comparison: The Old Way vs The AI Way */}
+      <section className="py-16 sm:py-20 bg-charcoal-900/60 border-y border-charcoal-800/80 px-4 sm:px-8 relative overflow-hidden">
+        {/* Subtle background ambient glow */}
+        <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-72 h-72 bg-red-500/5 blur-[100px] pointer-events-none rounded-full" />
+        <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-72 h-72 bg-emerald-500/5 blur-[100px] pointer-events-none rounded-full" />
+
+        <div className="max-w-6xl mx-auto relative z-10">
+          <div className="text-center mb-12 sm:mb-16">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-charcoal-800 border border-charcoal-700 text-xs font-bold text-amber-400 mb-3 shadow-sm">
+              <Zap className="w-3.5 h-3.5" />
+              <span>Visual Comparison • The Problem vs The Solution</span>
+            </div>
+            <h2 className="text-2xl sm:text-4xl font-black text-white tracking-tight">
               Say Goodbye to Lost Paper Receipts &amp; Messy Site Notebooks
             </h2>
-            <p className="text-xs sm:text-sm text-charcoal-400 mt-2">
-              Construction Khata AI modernizes and automates your job-site financial records.
+            <p className="text-xs sm:text-sm md:text-base text-charcoal-400 mt-2 max-w-2xl mx-auto">
+              See the exact difference between traditional job-site paper chaos and instant AI automation.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-6">
-            <div className="bg-red-950/20 border border-red-900/40 rounded-3xl p-6 space-y-3">
-              <div className="text-red-400 font-black text-sm uppercase tracking-wider flex items-center gap-2">
-                <span>❌ The Traditional Pain (Paper Notebooks &amp; Lost Receipts)</span>
+          <div className="grid lg:grid-cols-2 gap-8 items-stretch">
+            {/* LEFT GRAPHIC CARD: The Traditional Paper Pain */}
+            <div className="bg-gradient-to-b from-charcoal-900 via-charcoal-900/90 to-red-950/20 border-2 border-red-900/40 hover:border-red-800/60 rounded-3xl p-6 sm:p-8 flex flex-col justify-between shadow-2xl relative overflow-hidden transition group">
+              {/* Top Card Badge */}
+              <div className="flex items-center justify-between pb-4 border-b border-red-900/30">
+                <div className="flex items-center gap-2 text-red-400 font-black text-xs sm:text-sm uppercase tracking-wider">
+                  <XCircle className="w-4 h-4 text-red-400 shrink-0" />
+                  <span>The Traditional Paper Chaos</span>
+                </div>
+                <span className="text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-red-950 text-red-400 border border-red-800/60">
+                  High Risk of Loss
+                </span>
               </div>
-              <ul className="space-y-2.5 text-xs sm:text-sm text-charcoal-300">
-                <li>• Delivery slips and bills get crumpled or lost in pockets on the job site.</li>
-                <li>• No reliable record of when cement and steel arrived or where they were used.</li>
-                <li>• Stressful disputes with suppliers at month-end over conflicting bill totals.</li>
-                <li>• Labor daily attendance and advance wage payments tracked on loose paper.</li>
-                <li>• Cloud apps completely freeze in basements and zero-network job sites.</li>
-              </ul>
+
+              {/* Graphic: Crumpled Physical Paper Receipt Mockup */}
+              <div className="my-6 relative">
+                <div className="relative mx-auto max-w-sm bg-amber-50/95 text-slate-800 rounded-2xl p-5 shadow-2xl border border-amber-200/80 -rotate-1 group-hover:rotate-0 transition-transform duration-300">
+                  {/* Crumpled Receipt Header with jagged tear */}
+                  <div className="border-b-2 border-dashed border-slate-300 pb-3 mb-3 flex items-start justify-between">
+                    <div>
+                      <div className="font-mono text-xs font-black tracking-wider text-slate-900 uppercase">
+                        SHARMA HARDWARE &amp; SANITARY
+                      </div>
+                      <div className="text-[10px] text-slate-500 font-mono">Challan # ???? • Date: 14/??/2026</div>
+                    </div>
+                    {/* Disputed Red Stamp */}
+                    <div className="border-2 border-red-600 text-red-600 font-black text-[10px] uppercase px-2 py-0.5 rounded -rotate-12 tracking-widest bg-red-100/80 shadow-sm">
+                      LOST RECEIPT
+                    </div>
+                  </div>
+
+                  {/* Scribbled blurred line items */}
+                  <div className="font-mono text-xs space-y-2 text-slate-700">
+                    <div className="flex justify-between items-center text-slate-400 line-through">
+                      <span>Cement (UltraTech) 50 Bags</span>
+                      <span>₹19,000</span>
+                    </div>
+                    <div className="flex justify-between items-center text-red-700 font-bold bg-red-100/70 p-1 rounded">
+                      <span className="flex items-center gap-1">
+                        <AlertTriangle className="w-3 h-3 text-red-600" />
+                        <span>Disputed: Was it 40 or 50 bags?</span>
+                      </span>
+                      <span>???</span>
+                    </div>
+                    <div className="flex justify-between items-center text-slate-600 text-[11px]">
+                      <span>Binding Wire 10kg</span>
+                      <span>₹850</span>
+                    </div>
+                  </div>
+
+                  {/* Coffee stain / water damage visual graphic */}
+                  <div className="absolute -bottom-3 -right-3 w-16 h-16 rounded-full bg-amber-700/10 border border-amber-600/20 pointer-events-none blur-xs" />
+
+                  {/* Torn bottom warning bar */}
+                  <div className="mt-4 pt-2.5 border-t border-slate-300 flex items-center justify-between text-[10px] text-red-600 font-bold">
+                    <span>⚠️ Crumpled in Pocket</span>
+                    <span>No Stock Record</span>
+                  </div>
+                </div>
+
+                {/* Floating Warning Callouts */}
+                <div className="absolute -top-3 -left-2 bg-charcoal-950/90 border border-red-800 text-red-300 text-[10px] font-bold px-2.5 py-1 rounded-xl shadow-lg flex items-center gap-1.5 backdrop-blur-sm">
+                  <FileX2 className="w-3.5 h-3.5 text-red-400" />
+                  <span>Missing Paper Receipts</span>
+                </div>
+
+                <div className="absolute -bottom-3 -right-2 bg-charcoal-950/90 border border-red-800 text-red-300 text-[10px] font-bold px-2.5 py-1 rounded-xl shadow-lg flex items-center gap-1.5 backdrop-blur-sm">
+                  <WifiOff className="w-3.5 h-3.5 text-red-400" />
+                  <span>No Network = App Frozen</span>
+                </div>
+              </div>
+
+              {/* Graphic Feature Pills (The Pain Points) */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-4 border-t border-red-900/30">
+                <div className="bg-red-950/40 border border-red-900/40 rounded-xl p-2.5 text-center">
+                  <div className="text-red-400 text-xs font-black">Lost Bills</div>
+                  <div className="text-[10px] text-charcoal-400 mt-0.5">Torn or lost in work pocket</div>
+                </div>
+                <div className="bg-red-950/40 border border-red-900/40 rounded-xl p-2.5 text-center">
+                  <div className="text-red-400 text-xs font-black">Stock Blindspot</div>
+                  <div className="text-[10px] text-charcoal-400 mt-0.5">Unexplained theft &amp; wastage</div>
+                </div>
+                <div className="bg-red-950/40 border border-red-900/40 rounded-xl p-2.5 text-center">
+                  <div className="text-red-400 text-xs font-black">Month-End Dispute</div>
+                  <div className="text-[10px] text-charcoal-400 mt-0.5">Hours of stressful ledger fights</div>
+                </div>
+              </div>
             </div>
 
-            <div className="bg-emerald-950/20 border border-emerald-900/40 rounded-3xl p-6 space-y-3">
-              <div className="text-emerald-400 font-black text-sm uppercase tracking-wider flex items-center gap-2">
-                <span>✅ The Modern Solution (Construction Khata AI)</span>
+            {/* RIGHT GRAPHIC CARD: The Construction Khata AI Way */}
+            <div className="bg-gradient-to-b from-charcoal-900 via-charcoal-900/90 to-emerald-950/20 border-2 border-emerald-500/50 hover:border-emerald-400 rounded-3xl p-6 sm:p-8 flex flex-col justify-between shadow-2xl relative overflow-hidden transition group ring-1 ring-emerald-500/20">
+              {/* Top Card Badge */}
+              <div className="flex items-center justify-between pb-4 border-b border-emerald-800/40">
+                <div className="flex items-center gap-2 text-emerald-400 font-black text-xs sm:text-sm uppercase tracking-wider">
+                  <FileCheck2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <span>The Construction Khata AI Way</span>
+                </div>
+                <span className="text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-emerald-950 text-emerald-300 border border-emerald-700/80 flex items-center gap-1">
+                  <Sparkles className="w-3 h-3 text-emerald-400" />
+                  <span>Vision AI Verified</span>
+                </span>
               </div>
-              <ul className="space-y-2.5 text-xs sm:text-sm text-charcoal-300">
-                <li>• Snap a photo — Gemini Vision AI extracts supplier, date, items, rate &amp; totals.</li>
-                <li>• Track material In, Out, and live warehouse balance down to the last bag.</li>
-                <li>• 1-click supplier ledger with transparent payments and WhatsApp PDF exports.</li>
-                <li>• Accurate labor wage logs, attendance, and advance payment records.</li>
-                <li>• 100% Pure Offline Architecture — zero downtime on zero-network job sites.</li>
-              </ul>
+
+              {/* Graphic: Smartphone Camera HUD Viewfinder with OCR bounding boxes */}
+              <div className="my-6 relative">
+                <div className="relative mx-auto max-w-sm bg-charcoal-950 border-2 border-charcoal-700 rounded-2xl p-4 shadow-2xl overflow-hidden group-hover:border-construction-500/60 transition-colors duration-300">
+                  {/* Viewfinder corner brackets */}
+                  <div className="absolute top-2 left-2 w-4 h-4 border-t-2 border-l-2 border-construction-400" />
+                  <div className="absolute top-2 right-2 w-4 h-4 border-t-2 border-r-2 border-construction-400" />
+                  <div className="absolute bottom-2 left-2 w-4 h-4 border-b-2 border-l-2 border-construction-400" />
+                  <div className="absolute bottom-2 right-2 w-4 h-4 border-b-2 border-r-2 border-construction-400" />
+
+                  {/* Animated Laser Scanning Line */}
+                  <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-0.5 bg-gradient-to-r from-transparent via-amber-400 to-transparent shadow-[0_0_12px_#f59e0b] animate-pulse pointer-events-none" />
+
+                  {/* Inside HUD: OCR Target Detection Boxes */}
+                  <div className="space-y-2.5 text-xs font-mono">
+                    {/* Bounding Box 1: Supplier */}
+                    <div className="border border-emerald-500/70 bg-emerald-950/60 p-2 rounded-xl flex items-center justify-between">
+                      <div className="flex items-center gap-1.5 text-emerald-300 font-bold text-[11px]">
+                        <Check className="w-3.5 h-3.5 text-emerald-400" />
+                        <span>Supplier: Sharma Hardware</span>
+                      </div>
+                      <span className="text-[9px] bg-emerald-500/20 text-emerald-300 px-1.5 py-0.5 rounded font-sans font-bold">
+                        Party Matched
+                      </span>
+                    </div>
+
+                    {/* Bounding Box 2: Line Items */}
+                    <div className="border border-cyan-500/70 bg-cyan-950/60 p-2 rounded-xl flex items-center justify-between">
+                      <div className="flex items-center gap-1.5 text-cyan-200 text-[11px]">
+                        <Boxes className="w-3.5 h-3.5 text-cyan-400" />
+                        <span>UltraTech Cement (50 Bags)</span>
+                      </div>
+                      <span className="text-[10px] font-bold text-cyan-300">₹19,000</span>
+                    </div>
+
+                    {/* Bounding Box 3: Total & Action Confirmation */}
+                    <div className="border border-amber-500/70 bg-amber-950/50 p-2 rounded-xl flex items-center justify-between">
+                      <div className="flex items-center gap-1 text-amber-300 font-bold text-[11px]">
+                        <Zap className="w-3.5 h-3.5 text-amber-400" />
+                        <span>Auto-Filed to: Vikas Nagar Site</span>
+                      </div>
+                      <span className="text-[9px] bg-amber-500 text-charcoal-950 px-2 py-0.5 rounded font-black font-sans uppercase">
+                        2s Done
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Live Stock Notification Pill inside HUD */}
+                  <div className="mt-3 pt-2.5 border-t border-charcoal-800 flex items-center justify-between text-[10px] text-emerald-400 font-bold font-sans">
+                    <span className="flex items-center gap-1">
+                      <CheckCircle2 className="w-3 h-3 text-emerald-400" />
+                      <span>Live Stock: +50 Bags Added</span>
+                    </span>
+                    <span className="text-charcoal-400">100% Offline Ready ⚡</span>
+                  </div>
+                </div>
+
+                {/* Floating AI Callouts */}
+                <div className="absolute -top-3 -left-2 bg-charcoal-950/95 border border-emerald-500 text-emerald-300 text-[10px] font-black px-2.5 py-1 rounded-xl shadow-lg flex items-center gap-1.5 backdrop-blur-sm">
+                  <Camera className="w-3.5 h-3.5 text-emerald-400" />
+                  <span>Gemini Vision OCR</span>
+                </div>
+
+                <div className="absolute -bottom-3 -right-2 bg-charcoal-950/95 border border-emerald-500 text-emerald-300 text-[10px] font-black px-2.5 py-1 rounded-xl shadow-lg flex items-center gap-1.5 backdrop-blur-sm">
+                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+                  <span>Zero Network Required</span>
+                </div>
+              </div>
+
+              {/* Graphic Feature Pills (The Superpowers) */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-4 border-t border-emerald-800/40">
+                <div className="bg-emerald-950/40 border border-emerald-800/40 rounded-xl p-2.5 text-center">
+                  <div className="text-emerald-400 text-xs font-black">2-Second OCR</div>
+                  <div className="text-[10px] text-charcoal-400 mt-0.5">Snap photo, zero typing</div>
+                </div>
+                <div className="bg-emerald-950/40 border border-emerald-800/40 rounded-xl p-2.5 text-center">
+                  <div className="text-emerald-400 text-xs font-black">Live Stock Balance</div>
+                  <div className="text-[10px] text-charcoal-400 mt-0.5">Every bag &amp; ton tracked</div>
+                </div>
+                <div className="bg-emerald-950/40 border border-emerald-800/40 rounded-xl p-2.5 text-center">
+                  <div className="text-emerald-400 text-xs font-black">1-Click Statements</div>
+                  <div className="text-[10px] text-charcoal-400 mt-0.5">Instant WhatsApp PDF</div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
