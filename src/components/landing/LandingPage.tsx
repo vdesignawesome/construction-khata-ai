@@ -24,7 +24,13 @@ import {
   XCircle,
   Check,
   FileX2,
-  FileCheck2
+  FileCheck2,
+  HardHat,
+  Wrench,
+  ClipboardCheck,
+  Truck,
+  Building,
+  Home
 } from 'lucide-react';
 import { BRAND_CONFIG } from '../../config/branding';
 import { useSaasStore } from '../../store/useSaasStore';
@@ -117,29 +123,52 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
 
   const targetAudience = [
     {
+      icon: HardHat,
       title: 'Civil Contractors & Builders',
       role: 'General & Commercial Contractors',
-      desc: 'Manage multiple concurrent construction sites, procurement logistics, and subcontractor teams with complete financial control.'
+      desc: 'Manage multiple concurrent construction sites, procurement logistics, and subcontractor teams with complete financial control.',
+      tag: 'Multi-Site Control',
+      color: 'amber'
     },
     {
+      icon: Wrench,
       title: 'Specialized Sub-Contractors',
       role: 'Plumbing, Electrical, Tile, Painting',
-      desc: 'Trade specialists tracking material bills, progress invoicing, and outstanding receivables across active project contracts.'
+      desc: 'Trade specialists tracking material bills, progress invoicing, and outstanding receivables across active project contracts.',
+      tag: 'Trades & Milestones',
+      color: 'blue'
     },
     {
+      icon: ClipboardCheck,
       title: 'Site Supervisors & Engineers',
       role: 'Job-Site Project Managers',
-      desc: 'Log incoming material deliveries on site instantly from mobile, monitor warehouse stock balances, and track daily labor.'
+      desc: 'Log incoming material deliveries on site instantly from mobile, monitor warehouse stock balances, and track daily labor.',
+      tag: 'Daily Field Logs',
+      color: 'emerald'
     },
     {
+      icon: Truck,
       title: 'Hardware & Material Suppliers',
       role: 'Building Material Vendors & Dealers',
-      desc: 'Monitor supplies delivered across different client construction sites with transparent, real-time ledger accounting.'
+      desc: 'Monitor supplies delivered across different client construction sites with transparent, real-time ledger accounting.',
+      tag: 'Supplies & Dues',
+      color: 'purple'
     },
     {
+      icon: Building,
+      title: 'Real Estate Developers',
+      role: 'Residential & Commercial Colonizers',
+      desc: 'Oversee major township developments, track overall cost overruns, and maintain auditable project cost accounts.',
+      tag: 'Macro Cost Control',
+      color: 'cyan'
+    },
+    {
+      icon: Home,
       title: 'Individual Home Owners',
       role: 'Self-Builders & Property Owners',
-      desc: 'Homeowners building their dream property who demand complete transparency over every rupee spent on cement, steel, and labor.'
+      desc: 'Homeowners building their dream property who demand complete transparency over every rupee spent on cement, steel, and labor.',
+      tag: 'Personal Transparency',
+      color: 'rose'
     }
   ];
 
@@ -564,13 +593,13 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
       </section>
 
       {/* Who is this for Section */}
-      <section id="who-it-is-for" className="py-16 bg-charcoal-900/40 border-y border-charcoal-800 px-4 sm:px-8">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center max-w-xl mx-auto mb-12">
+      <section id="who-it-is-for" className="py-16 sm:py-24 bg-charcoal-900/40 border-y border-charcoal-800 px-4 sm:px-8">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center max-w-xl mx-auto mb-12 sm:mb-16">
             <div className="text-xs font-black uppercase tracking-wider text-construction-400 mb-2">
               Target Audience
             </div>
-            <h2 className="text-2xl sm:text-4xl font-black text-white">
+            <h2 className="text-2xl sm:text-4xl font-black text-white tracking-tight">
               Who Is Construction Khata AI Built For?
             </h2>
             <p className="text-xs sm:text-sm text-charcoal-400 mt-2">
@@ -578,17 +607,66 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
             </p>
           </div>
 
-          <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
-            {targetAudience.map((aud, i) => (
-              <div key={i} className="bg-charcoal-950/70 border border-charcoal-800/80 rounded-2xl p-5 space-y-2">
-                <div className="text-sm font-black text-white flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-construction-400" />
-                  <span>{aud.title}</span>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
+            {targetAudience.map((aud, i) => {
+              const Icon = aud.icon;
+              return (
+                <div
+                  key={i}
+                  className="bg-charcoal-950/80 border border-charcoal-800 hover:border-charcoal-700 hover:bg-charcoal-900/60 rounded-3xl p-6 space-y-4 transition-all duration-200 group flex flex-col justify-between shadow-xl"
+                >
+                  <div className="space-y-3.5">
+                    {/* Top Icon Badge & Tag */}
+                    <div className="flex items-center justify-between">
+                      <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg transition-transform group-hover:scale-105 ${
+                        aud.color === 'amber'
+                          ? 'bg-amber-500/15 text-amber-400 border border-amber-500/30 shadow-amber-500/10'
+                          : aud.color === 'blue'
+                          ? 'bg-blue-500/15 text-blue-400 border border-blue-500/30 shadow-blue-500/10'
+                          : aud.color === 'emerald'
+                          ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 shadow-emerald-500/10'
+                          : aud.color === 'purple'
+                          ? 'bg-purple-500/15 text-purple-400 border border-purple-500/30 shadow-purple-500/10'
+                          : aud.color === 'cyan'
+                          ? 'bg-cyan-500/15 text-cyan-400 border border-cyan-500/30 shadow-cyan-500/10'
+                          : 'bg-rose-500/15 text-rose-400 border border-rose-500/30 shadow-rose-500/10'
+                      }`}>
+                        <Icon className="w-6 h-6" />
+                      </div>
+
+                      <span className={`text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-full border ${
+                        aud.color === 'amber'
+                          ? 'bg-amber-950/50 text-amber-300 border-amber-800/60'
+                          : aud.color === 'blue'
+                          ? 'bg-blue-950/50 text-blue-300 border-blue-800/60'
+                          : aud.color === 'emerald'
+                          ? 'bg-emerald-950/50 text-emerald-300 border-emerald-800/60'
+                          : aud.color === 'purple'
+                          ? 'bg-purple-950/50 text-purple-300 border-purple-800/60'
+                          : aud.color === 'cyan'
+                          ? 'bg-cyan-950/50 text-cyan-300 border-cyan-800/60'
+                          : 'bg-rose-950/50 text-rose-300 border-rose-800/60'
+                      }`}>
+                        {aud.tag}
+                      </span>
+                    </div>
+
+                    <div>
+                      <h3 className="text-base font-extrabold text-white group-hover:text-construction-300 transition-colors">
+                        {aud.title}
+                      </h3>
+                      <div className="text-[11px] font-bold text-charcoal-400 mt-0.5">
+                        {aud.role}
+                      </div>
+                    </div>
+
+                    <p className="text-xs text-charcoal-300/90 leading-relaxed">
+                      {aud.desc}
+                    </p>
+                  </div>
                 </div>
-                <div className="text-[11px] font-bold text-amber-400/80">{aud.role}</div>
-                <p className="text-xs text-charcoal-400 leading-relaxed">{aud.desc}</p>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>

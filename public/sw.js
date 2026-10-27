@@ -1,4 +1,4 @@
-const CACHE_NAME = 'construction-khata-v18';
+const CACHE_NAME = 'construction-khata-v19';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
