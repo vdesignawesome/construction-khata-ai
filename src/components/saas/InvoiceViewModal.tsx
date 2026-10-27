@@ -2,6 +2,7 @@ import React from 'react';
 import { X, Printer, Download, CheckCircle2, ShieldCheck, Building2, Calendar, FileText } from 'lucide-react';
 import type { SubscriptionInvoice } from '../../types/saas';
 import { formatCurrency, formatDate } from '../../utils/formatters';
+import { BRAND_CONFIG } from '../../config/branding';
 
 interface InvoiceViewModalProps {
   invoice: SubscriptionInvoice | null;
@@ -55,21 +56,21 @@ export const InvoiceViewModal: React.FC<InvoiceViewModalProps> = ({ invoice, onC
           <div className="flex flex-col sm:flex-row justify-between items-start gap-4 pb-6 border-b border-slate-200">
             <div>
               <div className="flex items-center space-x-2">
-                <div className="w-8 h-8 rounded-xl bg-amber-500 text-charcoal-950 flex items-center justify-center font-black text-base">
+                <div className="w-8 h-8 rounded-xl bg-amber-500 text-charcoal-950 flex items-center justify-center font-black text-base shadow-sm">
                   CK
                 </div>
                 <div>
                   <h2 className="text-lg font-black text-slate-900 leading-tight">
                     Construction Khata AI
                   </h2>
-                  <span className="text-[10px] text-slate-500 font-semibold">
-                    Advanced Construction SaaS Platform
+                  <span className="text-[10px] text-amber-600 font-bold uppercase tracking-wide">
+                    An {BRAND_CONFIG.parentBrand} Ecosystem Product
                   </span>
                 </div>
               </div>
               <div className="mt-2 text-[11px] text-slate-500 space-y-0.5">
                 <div>HSN / SAC Code: 998314 (Cloud Software Services)</div>
-                <div>Support: support@constructionkhata.ai</div>
+                <div>Support: {BRAND_CONFIG.supportEmail}</div>
               </div>
             </div>
 
@@ -192,7 +193,7 @@ export const InvoiceViewModal: React.FC<InvoiceViewModalProps> = ({ invoice, onC
           <div className="pt-4 border-t border-slate-200 text-center text-[10px] text-slate-400">
             This is a computer-generated tax invoice and payment receipt. No physical signature is required.
             <br />
-            Thank you for partnering with Construction Khata AI!
+            Thank you for partnering with Construction Khata AI • Powered by {BRAND_CONFIG.parentBrand} Ecosystem.
           </div>
         </div>
       </div>

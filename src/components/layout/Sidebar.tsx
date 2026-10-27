@@ -22,6 +22,7 @@ import {
 import { useAppStore, type NavigationTab } from '../../store/useAppStore';
 import { useSaasStore } from '../../store/useSaasStore';
 import { GoogleAdBanner } from '../ads/GoogleAdBanner';
+import { BRAND_CONFIG } from '../../config/branding';
 
 interface SidebarProps {
   isOpen: boolean;
@@ -91,7 +92,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
                   AI
                 </span>
               </div>
-              <div className="text-xs text-charcoal-400 font-medium">Site Khata & Inventory</div>
+              <div className="text-[11px] text-amber-400/90 font-bold tracking-wide flex items-center gap-1">
+                <span>by</span>
+                <span className="text-white font-extrabold">{BRAND_CONFIG.parentBrand}</span>
+              </div>
             </div>
           </div>
           <button
@@ -170,6 +174,16 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
             <div className="flex items-center space-x-1 text-emerald-400">
               <ShieldCheck className="w-3.5 h-3.5" />
               <span>Local Offline</span>
+            </div>
+          </div>
+
+          {/* OmniCraft Ecosystem Footer */}
+          <div className="pt-2 border-t border-charcoal-800/60 text-center">
+            <div className="text-[10px] text-charcoal-400 font-semibold tracking-wider flex items-center justify-center gap-1">
+              <span>Powered by</span>
+              <span className="text-amber-400 font-black">{BRAND_CONFIG.parentBrand}</span>
+              <span className="text-charcoal-500">•</span>
+              <span className="text-charcoal-400">Ecosystem</span>
             </div>
           </div>
         </div>

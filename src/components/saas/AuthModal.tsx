@@ -24,6 +24,7 @@ import { getTenantInvoices } from '../../services/razorpay';
 import type { SubscriptionInvoice } from '../../types/saas';
 import { InvoiceViewModal } from './InvoiceViewModal';
 import { formatCurrency, formatDate } from '../../utils/formatters';
+import { BRAND_CONFIG } from '../../config/branding';
 
 export const AuthModal: React.FC = () => {
   const {
@@ -346,9 +347,14 @@ export const AuthModal: React.FC = () => {
       <div className="bg-charcoal-900 border border-charcoal-700 rounded-t-3xl sm:rounded-3xl w-full max-w-md shadow-2xl overflow-hidden max-h-[92vh] flex flex-col animate-in slide-in-from-bottom-4 sm:zoom-in-95">
         {/* Banner with 4-Month Free Offer */}
         <div className="bg-gradient-to-r from-construction-600 via-amber-500 to-construction-500 p-5 text-charcoal-950 relative">
-          <div className="flex items-center space-x-2 text-xs font-black uppercase tracking-wider bg-black/15 px-2.5 py-1 rounded-full w-fit mb-2">
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>Launch Offer</span>
+          <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center space-x-1.5 text-[10px] font-black uppercase tracking-wider bg-black/15 px-2.5 py-1 rounded-full">
+              <Sparkles className="w-3 h-3" />
+              <span>{BRAND_CONFIG.parentBrand} Ecosystem</span>
+            </div>
+            <span className="text-[10px] font-bold bg-white/20 px-2 py-0.5 rounded-full">
+              Launch Offer
+            </span>
           </div>
 
           <h3 className="text-xl font-extrabold leading-tight">
@@ -533,6 +539,12 @@ export const AuthModal: React.FC = () => {
               <ArrowRight className="w-4 h-4" />
             </button>
           </form>
+
+          <div className="pt-3 pb-1 text-center">
+            <span className="text-[10px] text-charcoal-400 font-medium">
+              Powered by <strong className="text-charcoal-300 font-bold">{BRAND_CONFIG.parentBrand}</strong> • Unified Business Applications
+            </span>
+          </div>
         </div>
       </div>
     </div>

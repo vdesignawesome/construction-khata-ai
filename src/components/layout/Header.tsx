@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { useAppStore } from '../../store/useAppStore';
 import { useSaasStore } from '../../store/useSaasStore';
+import { BRAND_CONFIG } from '../../config/branding';
 
 interface HeaderProps {
   onToggleSidebar?: () => void;
@@ -89,6 +90,15 @@ export const Header: React.FC<HeaderProps> = ({ onToggleSidebar }) => {
 
       {/* Right: Controls hidden on mobile, visible on desktop (md:flex) */}
       <div className="hidden md:flex items-center space-x-2 sm:space-x-3">
+        {/* OmniCraft Brand Pill */}
+        <div
+          className="hidden xl:flex items-center space-x-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-charcoal-800/80 border border-charcoal-700/80 text-charcoal-300"
+          title={`${BRAND_CONFIG.parentBrand} Ecosystem • ${BRAND_CONFIG.parentTagline}`}
+        >
+          <span className="w-1.5 h-1.5 rounded-full bg-construction-400"></span>
+          <span>{BRAND_CONFIG.parentBrand}</span>
+        </div>
+
         {/* Offline indicator */}
         <div
           className={`flex items-center space-x-1.5 px-2.5 py-1 rounded-full text-xs font-medium border ${

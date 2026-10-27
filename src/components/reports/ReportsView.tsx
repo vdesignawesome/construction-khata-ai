@@ -23,6 +23,7 @@ import {
 } from '../../engine/accounting';
 import { formatCurrency, formatDate } from '../../utils/formatters';
 import { GoogleAdBanner } from '../ads/GoogleAdBanner';
+import { BRAND_CONFIG } from '../../config/branding';
 
 type ReportType =
   | 'project_cost'
@@ -174,17 +175,22 @@ export const ReportsView: React.FC = () => {
       doc.rect(0, 0, 210, 30, 'F');
 
       doc.setTextColor(245, 158, 11); // Construction Yellow
-      doc.setFontSize(16);
+      doc.setFontSize(15);
       doc.setFont('helvetica', 'bold');
-      doc.text('CONSTRUCTION KHATA AI', 14, 14);
+      doc.text('CONSTRUCTION KHATA AI', 14, 13);
+
+      doc.setFontSize(8);
+      doc.setTextColor(251, 191, 36); // Amber 400
+      doc.setFont('helvetica', 'normal');
+      doc.text(`by ${BRAND_CONFIG.parentBrand} Ecosystem`, 14, 18);
 
       doc.setTextColor(255, 255, 255);
-      doc.setFontSize(11);
-      doc.text(`Site: ${siteTitle}`, 14, 23);
-
       doc.setFontSize(10);
-      doc.setTextColor(100, 116, 139);
-      doc.text(`Generated: ${new Date().toLocaleDateString('en-IN')}`, 140, 23);
+      doc.text(`Site: ${siteTitle}`, 14, 25);
+
+      doc.setFontSize(9);
+      doc.setTextColor(148, 163, 184);
+      doc.text(`Generated: ${new Date().toLocaleDateString('en-IN')}`, 140, 25);
 
       // Report Header
       doc.setTextColor(0, 0, 0);
@@ -278,6 +284,16 @@ export const ReportsView: React.FC = () => {
         styles: {
           fontSize: 9,
           cellPadding: 3
+        },
+        didDrawPage: (data) => {
+          const pageCount = (doc as any).internal.getNumberOfPages();
+          doc.setFontSize(8);
+          doc.setTextColor(148, 163, 184);
+          doc.text(
+            `Generated via Construction Khata AI • Powered by ${BRAND_CONFIG.parentBrand} Ecosystem • Page ${data.pageNumber} of ${pageCount}`,
+            14,
+            doc.internal.pageSize.height - 7
+          );
         }
       });
 
