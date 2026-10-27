@@ -52,6 +52,7 @@ import type {
 } from '../../types/saas';
 import { formatCurrency, formatDate } from '../../utils/formatters';
 import { InvoiceViewModal } from './InvoiceViewModal';
+import { getSavedAdSenseConfig, saveAdSenseConfig, type AdSenseConfig } from '../../services/adsense';
 
 interface SuperAdminPageProps {
   onBack: () => void;
@@ -77,10 +78,13 @@ export const SuperAdminPage: React.FC<SuperAdminPageProps> = ({ onBack }) => {
   const [passcodeError, setPasscodeError] = useState('');
 
   // Admin View State
-  const [activeTab, setActiveTab] = useState<'customers' | 'plans' | 'transactions' | 'firebase'>('customers');
+  const [activeTab, setActiveTab] = useState<'customers' | 'plans' | 'transactions' | 'firebase' | 'ads'>('customers');
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'suspended'>('all');
   const [planFilter, setPlanFilter] = useState<'all' | 'free_trial' | 'pro' | 'enterprise'>('all');
+
+  // AdSense Config State
+  const [adConfig, setAdConfig] = useState<AdSenseConfig>(getSavedAdSenseConfig());
 
   // Transactions & Invoices State
   const [invoices, setInvoices] = useState<SubscriptionInvoice[]>([]);
@@ -117,6 +121,7 @@ export const SuperAdminPage: React.FC<SuperAdminPageProps> = ({ onBack }) => {
       });
       setInvoices(getAllInvoices());
       setRazorpayConfig(getRazorpayConfig());
+      setAdConfig(getSavedAdSenseConfig());
       const cfg = getSavedFirebaseConfig();
       if (cfg) setFbConfig(cfg);
       const { isLive } = initFirebaseService();
@@ -199,6 +204,12 @@ export const SuperAdminPage: React.FC<SuperAdminPageProps> = ({ onBack }) => {
     e.preventDefault();
     saveRazorpayConfig(razorpayConfig);
     showToast('Razorpay credentials updated successfully!', 'success');
+  };
+
+  const handleSaveAdSense = (e: React.FormEvent) => {
+    e.preventDefault();
+    saveAdSenseConfig(adConfig);
+    showToast('Google AdSense configuration saved successfully!', 'success');
   };
 
   // Transaction & Revenue Metrics
@@ -441,6 +452,21 @@ export const SuperAdminPage: React.FC<SuperAdminPageProps> = ({ onBack }) => {
             <span>Gateway &amp; Cloud Sync</span>
             {isFirebaseLive && (
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            )}
+          </button>
+
+          <button
+            onClick={() => setActiveTab('ads')}
+            className={`py-2 px-4 rounded-lg transition flex items-center space-x-2 ${
+              activeTab === 'ads'
+                ? 'bg-amber-500 text-charcoal-950 shadow font-black'
+                : 'text-charcoal-400 hover:text-white'
+            }`}
+          >
+            <Zap className="w-4 h-4" />
+            <span>Google Ads Monetization</span>
+            {adConfig.client && (
+              <span className="w-2 h-2 rounded-full bg-emerald-400" />
             )}
           </button>
         </div>
@@ -1190,6 +1216,128 @@ export const SuperAdminPage: React.FC<SuperAdminPageProps> = ({ onBack }) => {
                   </button>
                 </div>
               </form>
+            </div>
+          </div>
+        )}
+
+        {/* TAB 5: GOOGLE ADS MONETIZATION */}
+        {activeTab === 'ads' && (
+          <div className="space-y-6 max-w-4xl">
+            {/* Header info card */}
+            <div className="bg-charcoal-900 border border-charcoal-800 rounded-2xl p-6 space-y-3">
+              <div className="flex items-center space-x-3">
+                <div className="w-12 h-12 rounded-2xl bg-amber-500/15 border border-amber-500/30 text-amber-400 flex items-center justify-center shrink-0">
+                  <Zap className="w-6 h-6" />
+                </div>
+                <div>
+                  <h3 className="text-base sm:text-lg font-black text-white">
+                    Google AdSense Monetization (Free Plan Ads)
+                  </h3>
+                  <p className="text-xs text-charcoal-400">
+                    Monetize users on the 120-Day Free Plan. Paid Pro &amp; Enterprise subscribers automatically get a 100% Ad-Free experience.
+                  </p>
+                </div>
+              </div>
+
+              <div className="p-3 bg-charcoal-950/80 rounded-xl border border-charcoal-800 text-xs text-charcoal-300 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                  <strong>How it works:</strong> Free trial contractors see responsive banner &amp; sidebar ads. When they upgrade to Pro (₹499/mo), all ads disappear instantly!
+                </div>
+                <a
+                  href="https://adsense.google.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-charcoal-800 hover:bg-charcoal-700 text-amber-400 font-bold px-3 py-1.5 rounded-lg text-xs flex items-center gap-1 shrink-0"
+                >
+                  <span>Google AdSense</span>
+                  <ExternalLink className="w-3.5 h-3.5" />
+                </a>
+              </div>
+            </div>
+
+            {/* AdSense Configuration Form */}
+            <div className="bg-charcoal-900 border border-charcoal-800 rounded-2xl p-6 shadow-sm space-y-4">
+              <h4 className="text-sm font-bold text-white flex items-center gap-2">
+                <Settings className="w-4 h-4 text-amber-400" />
+                <span>AdSense Publisher Credentials</span>
+              </h4>
+
+              <form onSubmit={handleSaveAdSense} className="space-y-4">
+                <div className="flex items-center space-x-3 p-3 bg-charcoal-950 rounded-xl border border-charcoal-800">
+                  <input
+                    type="checkbox"
+                    id="enableAdsToggle"
+                    checked={adConfig.isEnabled}
+                    onChange={(e) => setAdConfig({ ...adConfig, isEnabled: e.target.checked })}
+                    className="w-4 h-4 rounded text-amber-500 bg-charcoal-800 border-charcoal-700 focus:ring-amber-400"
+                  />
+                  <label htmlFor="enableAdsToggle" className="text-xs font-bold text-white cursor-pointer">
+                    Enable Advertisements on Free / Trial Accounts
+                  </label>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-bold text-charcoal-300 mb-1">
+                      AdSense Publisher Client ID (ca-pub-XXXXXXXXXXXX)
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="ca-pub-1234567890123456"
+                      value={adConfig.client}
+                      onChange={(e) => setAdConfig({ ...adConfig, client: e.target.value })}
+                      className="w-full bg-charcoal-800 border border-charcoal-700 rounded-xl p-2.5 text-xs text-white placeholder-charcoal-500 font-mono focus:outline-none focus:border-amber-400"
+                    />
+                    <span className="text-[10px] text-charcoal-500 mt-1 block">
+                      Found in your Google AdSense Account ➔ Settings ➔ Account information.
+                    </span>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-charcoal-300 mb-1">
+                      Ad Slot ID (Banner Unit)
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="9876543210"
+                      value={adConfig.slotId || ''}
+                      onChange={(e) => setAdConfig({ ...adConfig, slotId: e.target.value })}
+                      className="w-full bg-charcoal-800 border border-charcoal-700 rounded-xl p-2.5 text-xs text-white placeholder-charcoal-500 font-mono focus:outline-none focus:border-amber-400"
+                    />
+                    <span className="text-[10px] text-charcoal-500 mt-1 block">
+                      Found in AdSense ➔ Ads ➔ By ad unit ➔ Display ad.
+                    </span>
+                  </div>
+                </div>
+
+                <div className="pt-2 flex justify-end">
+                  <button
+                    type="submit"
+                    className="bg-amber-500 hover:bg-amber-400 text-charcoal-950 font-black px-5 py-2.5 rounded-xl text-xs flex items-center space-x-2 transition shadow active:scale-95"
+                  >
+                    <Save className="w-4 h-4" />
+                    <span>Save AdSense Configuration</span>
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            {/* Ad Preview Card */}
+            <div className="bg-charcoal-900 border border-charcoal-800 rounded-2xl p-6 space-y-3">
+              <div className="text-xs font-bold text-white flex items-center gap-2">
+                <span>Free Plan Ad Status &amp; Preview:</span>
+              </div>
+              <div className="p-4 bg-charcoal-950 rounded-xl border border-dashed border-charcoal-700 text-center">
+                {adConfig.client && adConfig.slotId ? (
+                  <div className="text-xs text-emerald-400 font-semibold">
+                    ✓ Google AdSense is LIVE with Publisher ID: <code className="text-white">{adConfig.client}</code> and Slot: <code className="text-white">{adConfig.slotId}</code>
+                  </div>
+                ) : (
+                  <div className="text-xs text-charcoal-400">
+                    Sponsor card is currently active (encouraging free contractors to upgrade to Pro). When you enter your Google AdSense Publisher &amp; Slot ID above, real Google Ads will display here!
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         )}

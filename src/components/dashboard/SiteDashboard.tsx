@@ -31,6 +31,7 @@ import { ExpenseFormModal } from '../expenses/ExpenseFormModal';
 import { MaterialUsageModal } from '../materials/MaterialUsageModal';
 import { LabourWorkModal } from '../labour/LabourWorkModal';
 import { SiteEditModal } from '../site/SiteEditModal';
+import { GoogleAdBanner } from '../ads/GoogleAdBanner';
 
 interface RecentActivity {
   id: string;
@@ -508,6 +509,9 @@ export const SiteDashboard: React.FC = () => {
           </div>
         )}
       </div>
+
+      {/* Google Ad / Free Plan Sponsor Banner */}
+      <GoogleAdBanner format="banner" className="my-2" />
 
       {/* Quick Action Modals */}
       {isPurchaseModalOpen && (

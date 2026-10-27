@@ -21,6 +21,7 @@ import {
 } from 'lucide-react';
 import { useAppStore, type NavigationTab } from '../../store/useAppStore';
 import { useSaasStore } from '../../store/useSaasStore';
+import { GoogleAdBanner } from '../ads/GoogleAdBanner';
 
 interface SidebarProps {
   isOpen: boolean;
@@ -135,6 +136,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
             );
           })}
         </nav>
+
+        {/* Sponsored Ad Banner for Free Plan */}
+        <GoogleAdBanner format="sidebar" className="mx-3 mb-2 shrink-0" />
 
         {/* SaaS Contractor Profile & Plan Info */}
         <div className="p-3.5 border-t border-charcoal-800/80 bg-charcoal-900/40 space-y-2">

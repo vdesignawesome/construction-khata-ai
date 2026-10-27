@@ -22,6 +22,7 @@ import {
   calculateLabourLedger
 } from '../../engine/accounting';
 import { formatCurrency, formatDate } from '../../utils/formatters';
+import { GoogleAdBanner } from '../ads/GoogleAdBanner';
 
 type ReportType =
   | 'project_cost'
@@ -582,6 +583,9 @@ export const ReportsView: React.FC = () => {
           )}
         </div>
       </div>
+
+      {/* Sponsored Ad Banner for Free Plan */}
+      <GoogleAdBanner format="banner" className="mt-4" />
     </div>
   );
 };
